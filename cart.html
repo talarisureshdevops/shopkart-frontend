@@ -831,176 +831,257 @@
 </div>
 
 <script>
-    /* ── Data ── */
-    let cartItems = [
-        { id: 1, name: 'Wireless Noise-Cancelling Headphones', category: 'Electronics', variant: 'Color: Midnight Black', emoji: '🎧', price: 129.99, original: 179.99, qty: 1 },
-        { id: 2, name: 'Premium Leather Sneakers', category: 'Footwear', variant: 'Size: US 10 · Color: White', emoji: '👟', price: 89.99, original: 120.00, qty: 2 },
-        { id: 3, name: 'Minimalist Smart Watch', category: 'Wearables', variant: 'Band: Silicone · Color: Space Gray', emoji: '⌚', price: 199.99, original: 249.99, qty: 1 },
-    ];
+const API     = 'http://YOUR_BACKEND_IP:5001';
+const USER_ID = 1; // replace with logged-in user id
 
-    const recommended = [
-        { name: 'Bluetooth Speaker', emoji: '🔊', price: 49.99 },
-        { name: 'Phone Stand', emoji: '📱', price: 19.99 },
-        { name: 'USB-C Hub', emoji: '💻', price: 34.99 },
-        { name: 'Cable Organizer', emoji: '🔌', price: 14.99 },
-    ];
+let cartItems    = [];
+let promoApplied = false;
+let promoDiscount = 0;
 
-    let promoApplied = false;
+// ── Load Cart from DB ─────────────────────────
+async function loadCart() {
+    const res  = await fetch(`${API}/api/cart/${USER_ID}`);
+    const data = await res.json();
 
-    /* ── Render Cart ── */
-    function renderCart() {
-        const container = document.getElementById('cartItems');
-        const emptyCart = document.getElementById('emptyCart');
-        const promoSection = document.getElementById('promoSection');
+    if (data.success) {
+        // Map DB response to cartItems format
+        cartItems = data.items.map(i => ({
+            id:       i.cart_item_id,
+            name:     i.name,
+            category: i.category,
+            variant:  i.variant,
+            emoji:    i.emoji,
+            price:    parseFloat(i.price),
+            original: parseFloat(i.original),
+            qty:      i.quantity
+        }));
+        renderCart();
+    }
+}
 
-        container.innerHTML = '';
+// ── Change Qty → API ──────────────────────────
+async function changeQty(id, delta) {
+    const item   = cartItems.find(i => i.id === id);
+    if (!item) return;
+    const newQty = item.qty + delta;
 
-        if (cartItems.length === 0) {
-            emptyCart.classList.add('visible');
-            promoSection.style.display = 'none';
-            updateSummary();
-            return;
-        }
+    await fetch(`${API}/api/cart/item/${id}`, {
+        method:  'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ quantity: newQty })
+    });
 
-        emptyCart.classList.remove('visible');
-        promoSection.style.display = 'block';
+    showToast('Cart updated');
+    loadCart();
+}
 
-        cartItems.forEach((item, index) => {
-            const el = document.createElement('div');
-            el.className = 'cart-item';
-            el.style.animationDelay = `${index * 0.07}s`;
-            el.innerHTML = `
-                <div class="item-img-placeholder">${item.emoji}</div>
-                <div class="item-details">
-                    <div class="item-category">${item.category}</div>
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-variant">${item.variant}</div>
-                    <div class="item-bottom">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
-                            <div class="qty-value" id="qty-${item.id}">${item.qty}</div>
-                            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-                        </div>
-                        <div class="item-price-wrap">
-                            <span class="item-original">$${item.original.toFixed(2)}</span>
-                            <span class="item-price">$${(item.price * item.qty).toFixed(2)}</span>
-                            <button class="remove-btn" onclick="removeItem(${item.id})" title="Remove">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="item-actions-row">
-                        <button class="item-action-link">Save for later</button>
-                        <button class="item-action-link">Add to Wishlist</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(el);
-        });
+// ── Remove Item → API ─────────────────────────
+async function removeItem(id) {
+    await fetch(`${API}/api/cart/item/${id}`, {
+        method: 'DELETE'
+    });
+    showToast('Item removed from cart');
+    loadCart();
+}
 
+// ── Clear Cart → API ──────────────────────────
+async function clearCart() {
+    await fetch(`${API}/api/cart/clear/${USER_ID}`, {
+        method: 'DELETE'
+    });
+    promoApplied  = false;
+    promoDiscount = 0;
+    showToast('Cart cleared');
+    loadCart();
+}
+
+// ── Apply Promo → API ─────────────────────────
+async function applyPromo() {
+    const code     = document.getElementById('promoInput').value.trim();
+    const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+
+    const res  = await fetch(`${API}/api/cart/promo`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ code, subtotal })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        promoApplied  = true;
+        promoDiscount = data.discount_amount;
+        document.getElementById('promoSuccess').classList.add('visible');
+        document.getElementById('promoSuccess').textContent =
+            `✓ ${data.message}`;
         updateSummary();
-        updateNavCount();
+        showToast('Promo code applied! 🎉');
+    } else {
+        showToast(data.message);
     }
+}
 
-    /* ── Change Qty ── */
-    function changeQty(id, delta) {
-        const item = cartItems.find(i => i.id === id);
-        if (!item) return;
-        item.qty = Math.max(1, item.qty + delta);
-        renderCart();
-        showToast('Cart updated');
-    }
+// ── Load Recommended Products from DB ─────────
+async function renderRecommended() {
+    const res  = await fetch(`${API}/api/products`);
+    const data = await res.json();
+    const grid = document.getElementById('recommendedGrid');
+    grid.innerHTML = '';
 
-    /* ── Remove ── */
-    function removeItem(id) {
-        cartItems = cartItems.filter(i => i.id !== id);
-        renderCart();
-        showToast('Item removed from cart');
-    }
-
-    /* ── Clear ── */
-    function clearCart() {
-        if (cartItems.length === 0) return;
-        cartItems = [];
-        promoApplied = false;
-        renderCart();
-        showToast('Cart cleared');
-    }
-
-    /* ── Summary ── */
-    function updateSummary() {
-        const count = cartItems.reduce((s, i) => s + i.qty, 0);
-        const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
-        const discount = promoApplied ? 20 : 0;
-        const shipping = subtotal > 50 ? 0 : 9.99;
-        const tax = (subtotal - discount) * 0.08;
-        const total = subtotal - discount + (shipping === 0 ? 0 : shipping) + tax;
-
-        document.getElementById('itemCount').textContent = count;
-        document.getElementById('cartCountText').textContent = `You have ${count} item${count !== 1 ? 's' : ''} in your cart`;
-        document.getElementById('sumCount').textContent = count;
-        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('discount').textContent = `-$${discount.toFixed(2)}`;
-        document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`;
-        document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-        document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-    }
-
-    /* ── Nav count ── */
-    function updateNavCount() {
-        const count = cartItems.reduce((s, i) => s + i.qty, 0);
-        document.getElementById('navCartCount').textContent = count;
-    }
-
-    /* ── Promo ── */
-    function applyPromo() {
-        const code = document.getElementById('promoInput').value.trim().toUpperCase();
-        if (code === 'NEXUS20') {
-            promoApplied = true;
-            document.getElementById('promoSuccess').classList.add('visible');
-            renderCart();
-            showToast('Promo code applied! 🎉');
-        } else {
-            showToast('Invalid promo code. Try NEXUS20');
-        }
-    }
-
-    /* ── Recommended ── */
-    function renderRecommended() {
-        const grid = document.getElementById('recommendedGrid');
-        recommended.forEach(item => {
+    if (data.success) {
+        // Show only first 4
+        data.products.slice(0, 4).forEach(item => {
             const card = document.createElement('div');
             card.className = 'rec-card';
             card.innerHTML = `
-                <div class="rec-img" style="background:var(--gray-50)">${item.emoji}</div>
+                <div class="rec-img"
+                     style="background:var(--gray-50)">
+                     ${item.emoji}
+                </div>
                 <div class="rec-body">
                     <div class="rec-name">${item.name}</div>
-                    <div class="rec-price">$${item.price.toFixed(2)}</div>
-                    <button class="rec-add" onclick="addRecommended('${item.name}')">+ Add to Cart</button>
+                    <div class="rec-price">
+                        $${parseFloat(item.price).toFixed(2)}
+                    </div>
+                    <button class="rec-add"
+                        onclick="addToCart(${item.id})">
+                        + Add to Cart
+                    </button>
                 </div>
             `;
             grid.appendChild(card);
         });
     }
+}
 
-    function addRecommended(name) {
-        showToast(`"${name}" added to cart!`);
+// ── Add Recommended to Cart ───────────────────
+async function addToCart(product_id) {
+    const res  = await fetch(`${API}/api/cart/add`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ user_id: USER_ID, product_id, quantity: 1 })
+    });
+    const data = await res.json();
+    if (data.success) {
+        showToast('Item added to cart!');
+        loadCart();
+    }
+}
+
+// ── Render Cart UI ────────────────────────────
+function renderCart() {
+    const container   = document.getElementById('cartItems');
+    const emptyCart   = document.getElementById('emptyCart');
+    const promoSection = document.getElementById('promoSection');
+
+    container.innerHTML = '';
+
+    if (cartItems.length === 0) {
+        emptyCart.classList.add('visible');
+        promoSection.style.display = 'none';
+        updateSummary();
+        return;
     }
 
-    /* ── Toast ── */
-    let toastTimer;
+    emptyCart.classList.remove('visible');
+    promoSection.style.display = 'block';
 
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        document.getElementById('toastMsg').textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
-    }
+    cartItems.forEach((item, index) => {
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.style.animationDelay = `${index * 0.07}s`;
+        el.innerHTML = `
+            <div class="item-img-placeholder">${item.emoji}</div>
+            <div class="item-details">
+                <div class="item-category">${item.category}</div>
+                <div class="item-name">${item.name}</div>
+                <div class="item-variant">${item.variant}</div>
+                <div class="item-bottom">
+                    <div class="qty-control">
+                        <button class="qty-btn"
+                            onclick="changeQty(${item.id}, -1)">−</button>
+                        <div class="qty-value">${item.qty}</div>
+                        <button class="qty-btn"
+                            onclick="changeQty(${item.id}, 1)">+</button>
+                    </div>
+                    <div class="item-price-wrap">
+                        <span class="item-original">
+                            $${item.original.toFixed(2)}
+                        </span>
+                        <span class="item-price">
+                            $${(item.price * item.qty).toFixed(2)}
+                        </span>
+                        <button class="remove-btn"
+                            onclick="removeItem(${item.id})">
+                            <svg fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M19 7l-.867 12.142A2 2 0
+                                         0116.138 21H7.862a2 2 0
+                                         01-1.995-1.858L5 7m5
+                                         4v6m4-6v6m1-10V4a1 1 0
+                                         00-1-1h-4a1 1 0 00-1
+                                         1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="item-actions-row">
+                    <button class="item-action-link">Save for later</button>
+                    <button class="item-action-link">Add to Wishlist</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(el);
+    });
 
-    /* ── Init ── */
-    renderCart();
-    renderRecommended();
+    updateSummary();
+    updateNavCount();
+}
+
+// ── Update Summary ────────────────────────────
+function updateSummary() {
+    const count    = cartItems.reduce((s, i) => s + i.qty, 0);
+    const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+    const discount = promoDiscount;
+    const shipping = subtotal > 50 ? 0 : 9.99;
+    const tax      = (subtotal - discount) * 0.08;
+    const total    = subtotal - discount +
+                     (shipping === 0 ? 0 : shipping) + tax;
+
+    document.getElementById('itemCount').textContent = count;
+    document.getElementById('cartCountText').textContent =
+        `You have ${count} item${count !== 1 ? 's' : ''} in your cart`;
+    document.getElementById('sumCount').textContent   = count;
+    document.getElementById('subtotal').textContent   = `$${subtotal.toFixed(2)}`;
+    document.getElementById('discount').textContent   = `-$${discount.toFixed(2)}`;
+    document.getElementById('shipping').textContent   =
+        shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`;
+    document.getElementById('tax').textContent        = `$${tax.toFixed(2)}`;
+    document.getElementById('total').textContent      = `$${total.toFixed(2)}`;
+}
+
+// ── Nav Count ─────────────────────────────────
+function updateNavCount() {
+    const count = cartItems.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('navCartCount').textContent = count;
+}
+
+// ── Toast ─────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+// ── Init ──────────────────────────────────────
+loadCart();
+renderRecommended();
 </script>
 </body>
 </html>
