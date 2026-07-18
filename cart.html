@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Nexus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--primary);
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 17px;
+        }
+
+        .nav-logo span {
+            font-size: 20px; font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a.active { color: var(--primary); font-weight: 600; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-icon-btn {
+            width: 38px; height: 38px;
+            border-radius: 8px; border: none;
+            background: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray-600); transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-icon-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+
+        .nav-icon-btn svg { width: 20px; height: 20px; }
+
+        .cart-count {
+            position: absolute;
+            top: 4px; right: 4px;
+            width: 16px; height: 16px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .nav-user {
+            width: 36px; height: 36px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 600; font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* ── Page Layout ── */
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 36px 24px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 26px; font-weight: 700;
+            color: var(--gray-900); margin-bottom: 4px;
+        }
+
+        .page-header p { color: var(--gray-500); font-size: 14px; }
+
+        .breadcrumb {
+            display: flex; align-items: center;
+            gap: 6px; font-size: 13px;
+            color: var(--gray-500); margin-bottom: 8px;
+        }
+
+        .breadcrumb a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover { color: var(--primary); }
+
+        .breadcrumb .sep { color: var(--gray-300); }
+        .breadcrumb .current { color: var(--gray-800); font-weight: 500; }
+
+        /* ── Grid ── */
+        .cart-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        /* ── Cart Items Card ── */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .card-header .clear-btn {
+            font-size: 13px; font-weight: 500;
+            color: var(--danger);
+            background: none; border: none;
+            cursor: pointer; padding: 4px 8px;
+            border-radius: 6px; transition: all 0.2s;
+        }
+
+        .card-header .clear-btn:hover { background: #fee2e2; }
+
+        /* ── Cart Item ── */
+        .cart-item {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            gap: 16px;
+            transition: background 0.2s;
+            animation: fadeSlideIn 0.4s ease both;
+        }
+
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item:hover { background: var(--gray-50); }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .item-image {
+            width: 90px; height: 90px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .item-img-placeholder {
+            width: 90px; height: 90px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            border: 1px solid var(--gray-200);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+        }
+
+        .item-details { flex: 1; min-width: 0; }
+
+        .item-category {
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .item-name {
+            font-size: 15px; font-weight: 600;
+            color: var(--gray-900); margin-bottom: 4px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .item-variant {
+            font-size: 12px; color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+
+        .item-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Quantity control */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            width: 32px; height: 32px;
+            border: none; background: white;
+            cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            color: var(--gray-600); transition: all 0.15s;
+            font-size: 16px; font-weight: 600;
+        }
+
+        .qty-btn:hover { background: var(--gray-100); color: var(--primary); }
+
+        .qty-value {
+            width: 36px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 600; color: var(--gray-800);
+            border-left: 1.5px solid var(--gray-200);
+            border-right: 1.5px solid var(--gray-200);
+        }
+
+        .item-price-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .item-price {
+            font-size: 16px; font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .item-original {
+            font-size: 13px;
+            color: var(--gray-400);
+            text-decoration: line-through;
+        }
+
+        .remove-btn {
+            width: 30px; height: 30px;
+            border-radius: 7px; border: 1px solid var(--gray-200);
+            background: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray-400); transition: all 0.2s;
+        }
+
+        .remove-btn svg { width: 14px; height: 14px; }
+
+        .remove-btn:hover {
+            background: #fee2e2; color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* ── Save for later / Wishlist strip ── */
+        .item-actions-row {
+            display: flex; gap: 12px; margin-top: 8px;
+        }
+
+        .item-action-link {
+            font-size: 12px; color: var(--gray-500);
+            background: none; border: none;
+            cursor: pointer; padding: 0;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .item-action-link:hover { color: var(--primary); }
+
+        /* ── Empty cart ── */
+        .empty-cart {
+            padding: 60px 24px;
+            text-align: center;
+            display: none;
+        }
+
+        .empty-cart.visible { display: block; }
+
+        .empty-cart svg {
+            width: 64px; height: 64px;
+            color: var(--gray-300); margin-bottom: 16px;
+        }
+
+        .empty-cart h3 {
+            font-size: 18px; font-weight: 600;
+            color: var(--gray-700); margin-bottom: 8px;
+        }
+
+        .empty-cart p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; }
+
+        /* ── Promo Code ── */
+        .promo-section {
+            padding: 20px 24px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .promo-label {
+            font-size: 13px; font-weight: 600;
+            color: var(--gray-700); margin-bottom: 10px;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .promo-input-wrap {
+            display: flex; gap: 8px;
+        }
+
+        .promo-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px; outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .promo-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .promo-apply {
+            padding: 10px 18px;
+            background: var(--primary);
+            color: white;
+            border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+
+        .promo-apply:hover {
+            background: var(--primary-dark);
+        }
+
+        .promo-success {
+            margin-top: 8px;
+            font-size: 13px; color: var(--success);
+            display: none; align-items: center; gap: 5px;
+        }
+
+        .promo-success.visible { display: flex; }
+
+        .promo-success svg { width: 14px; height: 14px; }
+
+        /* ── Order Summary ── */
+        .summary-card {
+            position: sticky;
+            top: 80px;
+        }
+
+        .summary-body { padding: 24px; }
+
+        .summary-title {
+            font-size: 16px; font-weight: 700;
+            color: var(--gray-900); margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+
+        .summary-row .label { color: var(--gray-600); }
+        .summary-row .value { font-weight: 600; color: var(--gray-800); }
+        .summary-row .value.discount { color: var(--success); }
+        .summary-row .value.free { color: var(--success); font-weight: 600; }
+
+        .summary-divider {
+            border: none;
+            border-top: 1px solid var(--gray-100);
+            margin: 16px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .summary-total .label {
+            font-size: 16px; font-weight: 700; color: var(--gray-900);
+        }
+
+        .summary-total .value {
+            font-size: 22px; font-weight: 800; color: var(--primary);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn-checkout:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(79,70,229,0.4);
+        }
+
+        .btn-checkout svg { width: 18px; height: 18px; }
+
+        .btn-continue {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+        }
+
+        .btn-continue:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* ── Payment badges ── */
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pay-badge {
+            padding: 4px 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            background: white;
+        }
+
+        .secure-text {
+            text-align: center;
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .secure-text svg { width: 13px; height: 13px; }
+
+        /* ── Delivery Info ── */
+        .delivery-info {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #166534;
+        }
+
+        .delivery-info svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        /* ── Recommended ── */
+        .recommended-section {
+            margin-top: 28px;
+        }
+
+        .section-title {
+            font-size: 18px; font-weight: 700;
+            color: var(--gray-900); margin-bottom: 16px;
+        }
+
+        .recommended-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .rec-card {
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .rec-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .rec-img {
+            height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px;
+        }
+
+        .rec-body { padding: 12px; }
+
+        .rec-name {
+            font-size: 13px; font-weight: 600;
+            color: var(--gray-800); margin-bottom: 4px;
+        }
+
+        .rec-price {
+            font-size: 15px; font-weight: 700;
+            color: var(--primary);
+        }
+
+        .rec-add {
+            width: 100%; padding: 8px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none; border-radius: 6px;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer; margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .rec-add:hover { background: var(--primary); color: white; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            background: var(--gray-900);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 14px; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg { width: 16px; height: 16px; color: var(--success); }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .cart-grid { grid-template-columns: 1fr; }
+            .summary-card { position: static; }
+        }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 0 16px; }
+            .nav-links { display: none; }
+            .page-wrapper { padding: 20px 16px; }
+            .cart-item { flex-direction: column; }
+            .item-img-placeholder { width: 60px; height: 60px; font-size: 22px; }
+            .item-bottom { flex-direction: column; align-items: flex-start; }
+            .recommended-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar">
+    <a class="nav-logo" href="#">
+        <div class="logo-icon">N</div>
+        <span>Nexus</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#" class="active">Cart</a></li>
+        <li><a href="#">Orders</a></li>
+    </ul>
+    <div class="nav-right">
+        <button class="nav-icon-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+        <button class="nav-icon-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </button>
+        <button class="nav-icon-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            <span class="cart-count" id="navCartCount">3</span>
+        </button>
+        <div class="nav-user">JD</div>
+    </div>
+</nav>
+
+<!-- ── Page ── -->
+<div class="page-wrapper">
+
+    <div class="page-header">
+        <div class="breadcrumb">
+            <a href="#">Home</a>
+            <span class="sep">›</span>
+            <a href="#">Shop</a>
+            <span class="sep">›</span>
+            <span class="current">Shopping Cart</span>
+        </div>
+        <h1>Shopping Cart</h1>
+        <p id="cartCountText">You have 3 items in your cart</p>
+    </div>
+
+    <div class="cart-grid">
+
+        <!-- ── Left: Cart Items ── -->
+        <div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Cart Items (<span id="itemCount">3</span>)</h2>
+                    <button class="clear-btn" onclick="clearCart()">Clear All</button>
+                </div>
+
+                <!-- Items list -->
+                <div id="cartItems"></div>
+
+                <!-- Empty state -->
+                <div class="empty-cart" id="emptyCart">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added anything yet.</p>
+                    <button class="btn-checkout" style="max-width:180px;margin:0 auto;" onclick="showToast('Browse our shop!')">
+                        Continue Shopping
+                    </button>
+                </div>
+
+                <!-- Promo Code -->
+                <div class="promo-section" id="promoSection">
+                    <div class="promo-label">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                        Have a promo code?
+                    </div>
+                    <div class="promo-input-wrap">
+                        <input class="promo-input" id="promoInput" type="text" placeholder="Enter code e.g. NEXUS20">
+                        <button class="promo-apply" onclick="applyPromo()">Apply</button>
+                    </div>
+                    <div class="promo-success" id="promoSuccess">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        Promo code applied! You saved $20.00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended -->
+            <div class="recommended-section">
+                <div class="section-title">You Might Also Like</div>
+                <div class="recommended-grid" id="recommendedGrid"></div>
+            </div>
+        </div>
+
+        <!-- ── Right: Summary ── -->
+        <div class="summary-card">
+            <div class="card">
+                <div class="summary-body">
+                    <div class="summary-title">Order Summary</div>
+
+                    <div class="delivery-info">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                        Free delivery on orders over $50!
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="label">Subtotal (<span id="sumCount">3</span> items)</span>
+                        <span class="value" id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Discount</span>
+                        <span class="value discount" id="discount">-$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Shipping</span>
+                        <span class="value free" id="shipping">Free</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Tax (8%)</span>
+                        <span class="value" id="tax">$0.00</span>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-total">
+                        <span class="label">Total</span>
+                        <span class="value" id="total">$0.00</span>
+                    </div>
+
+                    <button class="btn-checkout" onclick="window.location.href='checkout.html'">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        Proceed to Checkout
+                    </button>
+
+                    <button class="btn-continue" onclick="showToast('Continue shopping!')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Continue Shopping
+                    </button>
+
+                    <div class="payment-methods">
+                        <span class="pay-badge">VISA</span>
+                        <span class="pay-badge">MC</span>
+                        <span class="pay-badge">AMEX</span>
+                        <span class="pay-badge">PayPal</span>
+                        <span class="pay-badge">Apple Pay</span>
+                    </div>
+
+                    <div class="secure-text">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Secure checkout — 256-bit SSL
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /cart-grid -->
+</div><!-- /page-wrapper -->
+
+<!-- ── Toast ── -->
+<div class="toast" id="toast">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+    /* ── Data ── */
+    let cartItems = [
+        { id: 1, name: 'Wireless Noise-Cancelling Headphones', category: 'Electronics', variant: 'Color: Midnight Black', emoji: '🎧', price: 129.99, original: 179.99, qty: 1 },
+        { id: 2, name: 'Premium Leather Sneakers', category: 'Footwear', variant: 'Size: US 10 · Color: White', emoji: '👟', price: 89.99, original: 120.00, qty: 2 },
+        { id: 3, name: 'Minimalist Smart Watch', category: 'Wearables', variant: 'Band: Silicone · Color: Space Gray', emoji: '⌚', price: 199.99, original: 249.99, qty: 1 },
+    ];
+
+    const recommended = [
+        { name: 'Bluetooth Speaker', emoji: '🔊', price: 49.99 },
+        { name: 'Phone Stand', emoji: '📱', price: 19.99 },
+        { name: 'USB-C Hub', emoji: '💻', price: 34.99 },
+        { name: 'Cable Organizer', emoji: '🔌', price: 14.99 },
+    ];
+
+    let promoApplied = false;
+
+    /* ── Render Cart ── */
+    function renderCart() {
+        const container = document.getElementById('cartItems');
+        const emptyCart = document.getElementById('emptyCart');
+        const promoSection = document.getElementById('promoSection');
+
+        container.innerHTML = '';
+
+        if (cartItems.length === 0) {
+            emptyCart.classList.add('visible');
+            promoSection.style.display = 'none';
+            updateSummary();
+            return;
+        }
+
+        emptyCart.classList.remove('visible');
+        promoSection.style.display = 'block';
+
+        cartItems.forEach((item, index) => {
+            const el = document.createElement('div');
+            el.className = 'cart-item';
+            el.style.animationDelay = `${index * 0.07}s`;
+            el.innerHTML = `
+                <div class="item-img-placeholder">${item.emoji}</div>
+                <div class="item-details">
+                    <div class="item-category">${item.category}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-variant">${item.variant}</div>
+                    <div class="item-bottom">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+                            <div class="qty-value" id="qty-${item.id}">${item.qty}</div>
+                            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                        </div>
+                        <div class="item-price-wrap">
+                            <span class="item-original">$${item.original.toFixed(2)}</span>
+                            <span class="item-price">$${(item.price * item.qty).toFixed(2)}</span>
+                            <button class="remove-btn" onclick="removeItem(${item.id})" title="Remove">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-actions-row">
+                        <button class="item-action-link">Save for later</button>
+                        <button class="item-action-link">Add to Wishlist</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(el);
+        });
+
+        updateSummary();
+        updateNavCount();
+    }
+
+    /* ── Change Qty ── */
+    function changeQty(id, delta) {
+        const item = cartItems.find(i => i.id === id);
+        if (!item) return;
+        item.qty = Math.max(1, item.qty + delta);
+        renderCart();
+        showToast('Cart updated');
+    }
+
+    /* ── Remove ── */
+    function removeItem(id) {
+        cartItems = cartItems.filter(i => i.id !== id);
+        renderCart();
+        showToast('Item removed from cart');
+    }
+
+    /* ── Clear ── */
+    function clearCart() {
+        if (cartItems.length === 0) return;
+        cartItems = [];
+        promoApplied = false;
+        renderCart();
+        showToast('Cart cleared');
+    }
+
+    /* ── Summary ── */
+    function updateSummary() {
+        const count = cartItems.reduce((s, i) => s + i.qty, 0);
+        const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+        const discount = promoApplied ? 20 : 0;
+        const shipping = subtotal > 50 ? 0 : 9.99;
+        const tax = (subtotal - discount) * 0.08;
+        const total = subtotal - discount + (shipping === 0 ? 0 : shipping) + tax;
+
+        document.getElementById('itemCount').textContent = count;
+        document.getElementById('cartCountText').textContent = `You have ${count} item${count !== 1 ? 's' : ''} in your cart`;
+        document.getElementById('sumCount').textContent = count;
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('discount').textContent = `-$${discount.toFixed(2)}`;
+        document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`;
+        document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+        document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    /* ── Nav count ── */
+    function updateNavCount() {
+        const count = cartItems.reduce((s, i) => s + i.qty, 0);
+        document.getElementById('navCartCount').textContent = count;
+    }
+
+    /* ── Promo ── */
+    function applyPromo() {
+        const code = document.getElementById('promoInput').value.trim().toUpperCase();
+        if (code === 'NEXUS20') {
+            promoApplied = true;
+            document.getElementById('promoSuccess').classList.add('visible');
+            renderCart();
+            showToast('Promo code applied! 🎉');
+        } else {
+            showToast('Invalid promo code. Try NEXUS20');
+        }
+    }
+
+    /* ── Recommended ── */
+    function renderRecommended() {
+        const grid = document.getElementById('recommendedGrid');
+        recommended.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'rec-card';
+            card.innerHTML = `
+                <div class="rec-img" style="background:var(--gray-50)">${item.emoji}</div>
+                <div class="rec-body">
+                    <div class="rec-name">${item.name}</div>
+                    <div class="rec-price">$${item.price.toFixed(2)}</div>
+                    <button class="rec-add" onclick="addRecommended('${item.name}')">+ Add to Cart</button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function addRecommended(name) {
+        showToast(`"${name}" added to cart!`);
+    }
+
+    /* ── Toast ── */
+    let toastTimer;
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    /* ── Init ── */
+    renderCart();
+    renderRecommended();
+</script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+
+wishlist.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - ShopElite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/wishlist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html"><i class="fas fa-shopping-bag"></i> ShopElite</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="toggleSearch()"><i class="fas fa-search"></i></button>
+                <button class="btn-icon active" onclick="location.href='wishlist.html'">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge" id="wishlistCount">4</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">3</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+                <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero wishlist-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1><i class="fas fa-heart"></i> My Wishlist</h1>
+                <p>Items you love, saved for later</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li><a href="index.html">Home</a></li>
+                        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+                        <li class="active">Wishlist</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="page-hero-stats">
+                <div class="stat-bubble">
+                    <span class="stat-number" id="totalWishItems">4</span>
+                    <span class="stat-label">Saved Items</span>
+                </div>
+                <div class="stat-bubble">
+                    <span class="stat-number">$1,240</span>
+                    <span class="stat-label">Total Value</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishlist Controls -->
+    <section class="wishlist-controls">
+        <div class="container">
+            <div class="controls-bar">
+                <div class="controls-left">
+                    <label class="select-all-checkbox">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        <span class="checkmark"></span>
+                        Select All
+                    </label>
+                    <span class="item-count" id="selectedCount">0 selected</span>
+                </div>
+                <div class="controls-right">
+                    <button class="btn btn-outline" onclick="addSelectedToCart()" id="addSelectedBtn" disabled>
+                        <i class="fas fa-cart-plus"></i> Add Selected to Cart
+                    </button>
+                    <button class="btn btn-danger-outline" onclick="removeSelected()" id="removeSelectedBtn" disabled>
+                        <i class="fas fa-trash"></i> Remove Selected
+                    </button>
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" id="listViewBtn" onclick="setView('list')">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishlist Items -->
+    <section class="wishlist-section">
+        <div class="container">
+            <div class="wishlist-grid" id="wishlistGrid">
+                <!-- Item 1 -->
+                <div class="wishlist-card" data-id="1">
+                    <div class="card-select">
+                        <input type="checkbox" class="item-checkbox" onchange="updateSelection()">
+                    </div>
+                    <div class="card-badge">
+                        <span class="badge-sale">-20%</span>
+                    </div>
+                    <button class="btn-remove-wish" onclick="removeFromWishlist(this)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop" alt="Premium Watch">
+                        <div class="card-overlay">
+                            <button class="btn-quick-view" onclick="openQuickView(1)">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category">Accessories</div>
+                        <h3 class="card-title">Premium Luxury Watch</h3>
+                        <div class="card-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span>(128 reviews)</span>
+                        </div>
+                        <div class="card-price">
+                            <span class="price-current">$199.99</span>
+                            <span class="price-old">$249.99</span>
+                        </div>
+                        <div class="card-stock in-stock">
+                            <i class="fas fa-check-circle"></i> In Stock
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-full" onclick="addToCart(1)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                        <div class="card-meta">
+                            <span class="added-date"><i class="fas fa-clock"></i> Added 2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="wishlist-card" data-id="2">
+                    <div class="card-select">
+                        <input type="checkbox" class="item-checkbox" onchange="updateSelection()">
+                    </div>
+                    <button class="btn-remove-wish" onclick="removeFromWishlist(this)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop" alt="Wireless Headphones">
+                        <div class="card-overlay">
+                            <button class="btn-quick-view" onclick="openQuickView(2)">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category">Electronics</div>
+                        <h3 class="card-title">Wireless Noise-Cancel Headphones</h3>
+                        <div class="card-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span>(256 reviews)</span>
+                        </div>
+                        <div class="card-price">
+                            <span class="price-current">$299.99</span>
+                        </div>
+                        <div class="card-stock in-stock">
+                            <i class="fas fa-check-circle"></i> In Stock
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-full" onclick="addToCart(2)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                        <div class="card-meta">
+                            <span class="added-date"><i class="fas fa-clock"></i> Added 5 days ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="wishlist-card" data-id="3">
+                    <div class="card-select">
+                        <input type="checkbox" class="item-checkbox" onchange="updateSelection()">
+                    </div>
+                    <div class="card-badge">
+                        <span class="badge-new">NEW</span>
+                    </div>
+                    <button class="btn-remove-wish" onclick="removeFromWishlist(this)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop" alt="Running Shoes">
+                        <div class="card-overlay">
+                            <button class="btn-quick-view" onclick="openQuickView(3)">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category">Footwear</div>
+                        <h3 class="card-title">Ultra Running Shoes Pro</h3>
+                        <div class="card-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span>(89 reviews)</span>
+                        </div>
+                        <div class="card-price">
+                            <span class="price-current">$149.99</span>
+                        </div>
+                        <div class="card-stock low-stock">
+                            <i class="fas fa-exclamation-circle"></i> Only 3 left!
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-full" onclick="addToCart(3)">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                        <div class="card-meta">
+                            <span class="added-date"><i class="fas fa-clock"></i> Added 1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 - Out of Stock -->
+                <div class="wishlist-card out-of-stock" data-id="4">
+                    <div class="card-select">
+                        <input type="checkbox" class="item-checkbox" onchange="updateSelection()" disabled>
+                    </div>
+                    <button class="btn-remove-wish" onclick="removeFromWishlist(this)" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop" alt="Leather Bag">
+                        <div class="oos-overlay">
+                            <span>Out of Stock</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-category">Bags</div>
+                        <h3 class="card-title">Premium Leather Messenger Bag</h3>
+                        <div class="card-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span>(312 reviews)</span>
+                        </div>
+                        <div class="card-price">
+                            <span class="price-current">$589.99</span>
+                        </div>
+                        <div class="card-stock out-of-stock-text">
+                            <i class="fas fa-times-circle"></i> Out of Stock
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary btn-full" onclick="notifyMe(4)">
+                                <i class="fas fa-bell"></i> Notify Me
+                            </button>
+                        </div>
+                        <div class="card-meta">
+                            <span class="added-date"><i class="fas fa-clock"></i> Added 2 weeks ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-wishlist" id="emptyWishlist" style="display:none;">
+                <div class="empty-icon">
+                    <i class="fas fa-heart-broken"></i>
+                </div>
+                <h2>Your wishlist is empty</h2>
+                <p>Save items you love by clicking the heart icon on any product</p>
+                <a href="products.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag"></i> Explore Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Section -->
+    <section class="recommendations-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>You May Also Like</h2>
+                <a href="products.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="recommendations-grid">
+                <div class="rec-card" onclick="location.href='product-detail.html'">
+                    <div class="rec-image">
+                        <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=300&fit=crop" alt="Sneakers">
+                        <button class="btn-add-wish" onclick="addToWishlist(event, 5)">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="rec-body">
+                        <h4>Sport Sneakers Elite</h4>
+                        <div class="rec-price">$89.99</div>
+                        <button class="btn btn-sm btn-primary" onclick="addToCart(5)">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="rec-card" onclick="location.href='product-detail.html'">
+                    <div class="rec-image">
+                        <img src="https://images.unsplash.com/photo-1608528577891-eb055944f2e7?w=300&h=300&fit=crop" alt="Sunglasses">
+                        <button class="btn-add-wish" onclick="addToWishlist(event, 6)">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="rec-body">
+                        <h4>Polarized Sunglasses</h4>
+                        <div class="rec-price">$79.99</div>
+                        <button class="btn btn-sm btn-primary" onclick="addToCart(6)">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="rec-card" onclick="location.href='product-detail.html'">
+                    <div class="rec-image">
+                        <img src="https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=300&h=300&fit=crop" alt="Backpack">
+                        <button class="btn-add-wish" onclick="addToWishlist(event, 7)">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="rec-body">
+                        <h4>Travel Backpack 40L</h4>
+                        <div class="rec-price">$129.99</div>
+                        <button class="btn btn-sm btn-primary" onclick="addToCart(7)">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                <div class="rec-card" onclick="location.href='product-detail.html'">
+                    <div class="rec-image">
+                        <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=300&h=300&fit=crop" alt="Sneakers">
+                        <button class="btn-add-wish" onclick="addToWishlist(event, 8)">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="rec-body">
+                        <h4>Classic Canvas Shoes</h4>
+                        <div class="rec-price">$59.99</div>
+                        <button class="btn btn-sm btn-primary" onclick="addToCart(8)">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Share Wishlist Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal share-modal">
+            <button class="modal-close" onclick="closeModal('shareModal')"><i class="fas fa-times"></i></button>
+            <h3><i class="fas fa-share-alt"></i> Share Wishlist</h3>
+            <p>Share your wishlist with friends and family</p>
+            <div class="share-link-box">
+                <input type="text" value="https://shopelite.com/wishlist/user123" readonly id="shareLink">
+                <button class="btn btn-primary" onclick="copyLink()">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+            <div class="share-social">
+                <button class="btn-social facebook"><i class="fab fa-facebook"></i> Facebook</button>
+                <button class="btn-social twitter"><i class="fab fa-twitter"></i> Twitter</button>
+                <button class="btn-social whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                <button class="btn-social email"><i class="fas fa-envelope"></i> Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShopElite. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/wishlist.js"></script>
+</body>
+</html>

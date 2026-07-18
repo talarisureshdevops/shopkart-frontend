@@ -1,0 +1,1244 @@
+order-success.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Order Confirmed – ShopKart" />
+  <title>Order Confirmed – ShopKart</title>
+
+  <link rel="icon" type="image/png" href="icons/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       ROOT VARIABLES
+    ============================================================ */
+    :root {
+      --primary: #2874f0; --primary-dark: #1a5ecb; --primary-light: #e8f0fe;
+      --secondary: #ff6f00; --secondary-light: #fff3e0;
+      --accent: #fb641b; --success: #26a541; --danger: #ff4444;
+      --warning: #ffc107; --dark: #212121; --gray-dark: #424242;
+      --gray: #757575; --gray-light: #9e9e9e; --gray-lighter: #e0e0e0;
+      --bg: #f1f3f6; --white: #ffffff;
+      --card-shadow: 0 2px 16px rgba(0,0,0,0.09);
+      --card-shadow-hover: 0 8px 32px rgba(0,0,0,0.16);
+      --radius: 8px; --radius-lg: 14px;
+      --transition: all 0.25s ease;
+      --font: "Inter", sans-serif;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--dark); line-height: 1.5; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; font-family: var(--font); border: none; outline: none; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    #toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      min-width: 280px; background: var(--dark); color: #fff;
+      padding: 14px 20px; border-radius: var(--radius); font-size: 14px;
+      font-weight: 500; display: flex; align-items: center; gap: 10px;
+      animation: slideInToast 0.3s ease, fadeOutToast 0.4s ease 2.8s forwards;
+      box-shadow: var(--card-shadow);
+    }
+    .toast.success { border-left: 4px solid var(--success); }
+    .toast.info    { border-left: 4px solid var(--primary); }
+    @keyframes slideInToast { from { transform:translateX(110%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+    @keyframes fadeOutToast  { to { opacity:0; transform:translateX(110%); } }
+
+    /* ============================================================
+       CONFETTI CANVAS
+    ============================================================ */
+    #confetti-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; width: 100%; height: 100%;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    #navbar {
+      background: var(--primary); height: 56px;
+      position: sticky; top: 0; z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .navbar-inner { display:flex; align-items:center; height:100%; gap:16px; }
+    .navbar-logo  { display:flex; align-items:flex-end; gap:2px; flex-shrink:0; }
+    .logo-text    { font-size:22px; font-weight:800; color:#fff; letter-spacing:-0.5px; }
+    .logo-text span { color:#ffc107; }
+    .logo-tagline { font-size:10px; color:rgba(255,255,255,0.8); font-style:italic; margin-bottom:2px; margin-left:2px; }
+
+    .navbar-search { flex:1; max-width:520px; }
+    .search-wrapper { display:flex; align-items:center; background:#fff; border-radius:var(--radius); overflow:hidden; }
+    #search-input { flex:1; padding:10px 16px; font-size:14px; color:var(--dark); border:none; outline:none; }
+    #search-btn { background:var(--primary); color:#fff; padding:10px 18px; font-size:16px; cursor:pointer; border:none; transition:var(--transition); }
+    #search-btn:hover { background:var(--primary-dark); }
+
+    .navbar-actions { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+    .nav-btn {
+      display:flex; flex-direction:column; align-items:center;
+      padding:6px 12px; border-radius:var(--radius); color:#fff;
+      font-size:12px; font-weight:500; gap:2px; position:relative; min-width:60px;
+    }
+    .nav-btn:hover { background:rgba(255,255,255,0.15); }
+    .nav-btn i { font-size:16px; }
+
+    /* ============================================================
+       PROGRESS STEPS
+    ============================================================ */
+    .steps-bar { background:var(--white); border-bottom:1px solid var(--gray-lighter); padding:14px 0; }
+    .steps-row { display:flex; align-items:center; justify-content:center; }
+    .step { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:var(--success); }
+    .step-num {
+      width:26px; height:26px; border-radius:50%;
+      border:2px solid var(--success); background:var(--success); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:700; flex-shrink:0;
+    }
+    .step-line { width:55px; height:2px; background:var(--success); margin:0 8px; }
+
+    /* ============================================================
+       MAIN PAGE
+    ============================================================ */
+    .success-page { padding:32px 0 60px; position:relative; z-index:1; }
+
+    /* ============================================================
+       SUCCESS HERO CARD
+    ============================================================ */
+    .success-hero {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); padding:48px 40px;
+      text-align:center; margin-bottom:20px;
+      position:relative; overflow:hidden;
+    }
+    .success-hero::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg, var(--success), var(--primary), var(--accent));
+    }
+
+    /* Animated success ring */
+    .success-ring {
+      width:120px; height:120px; margin:0 auto 24px;
+      position:relative; animation:ringIn 0.6s ease;
+    }
+    @keyframes ringIn { from{transform:scale(0) rotate(-90deg);opacity:0;} to{transform:scale(1) rotate(0deg);opacity:1;} }
+
+    .ring-svg { width:120px; height:120px; }
+    .ring-circle {
+      fill:none; stroke:var(--success); stroke-width:4;
+      stroke-dasharray:314; stroke-dashoffset:314;
+      animation:drawRing 1s ease 0.3s forwards;
+      transform:rotate(-90deg); transform-origin:center;
+    }
+    @keyframes drawRing { to { stroke-dashoffset:0; } }
+    .ring-check { font-size:52px; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); animation:checkPop 0.4s ease 0.8s both; }
+    @keyframes checkPop { from{transform:translate(-50%,-50%) scale(0);opacity:0;} to{transform:translate(-50%,-50%) scale(1);opacity:1;} }
+
+    .success-hero h1 { font-size:30px; font-weight:800; color:var(--dark); margin-bottom:8px; }
+    .success-hero .sub-text { font-size:15px; color:var(--gray); margin-bottom:24px; line-height:1.6; }
+
+    /* Order ID Box */
+    .order-id-wrap {
+      display:inline-flex; align-items:center; gap:12px;
+      background:var(--bg); border-radius:var(--radius);
+      padding:14px 24px; margin-bottom:24px;
+    }
+    .order-id-label { font-size:12px; color:var(--gray); font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+    .order-id-value { font-size:18px; font-weight:800; color:var(--dark); font-family:monospace; letter-spacing:1px; }
+    .copy-btn {
+      background:var(--primary-light); color:var(--primary); border:none;
+      padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700;
+      cursor:pointer; transition:var(--transition); display:flex; align-items:center; gap:5px;
+    }
+    .copy-btn:hover { background:var(--primary); color:#fff; }
+
+    /* Quick Actions */
+    .quick-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+    .quick-btn {
+      padding:12px 24px; border-radius:var(--radius); font-size:14px;
+      font-weight:700; cursor:pointer; transition:var(--transition);
+      display:flex; align-items:center; gap:8px;
+    }
+    .quick-btn-primary { background:var(--primary); color:#fff; }
+    .quick-btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 6px 20px rgba(40,116,240,0.4); }
+    .quick-btn-outline { background:var(--white); color:var(--primary); border:2px solid var(--primary); }
+    .quick-btn-outline:hover { background:var(--primary); color:#fff; }
+    .quick-btn-accent { background:var(--accent); color:#fff; }
+    .quick-btn-accent:hover { background:#e5570e; transform:translateY(-1px); box-shadow:0 6px 20px rgba(251,100,27,0.4); }
+
+    /* ============================================================
+       CONTENT GRID
+    ============================================================ */
+    .content-grid { display:grid; grid-template-columns:1fr 360px; gap:20px; }
+
+    /* ============================================================
+       ORDER DETAILS CARD
+    ============================================================ */
+    .detail-card {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); overflow:hidden; margin-bottom:20px;
+    }
+    .detail-card-header {
+      padding:16px 20px; border-bottom:1px solid var(--gray-lighter);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .detail-card-header h2 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:10px; }
+    .detail-card-header h2 i { color:var(--primary); }
+    .detail-card-body { padding:20px; }
+
+    /* ============================================================
+       DELIVERY TRACKER
+    ============================================================ */
+    .tracker-wrap { padding:20px; }
+    .tracker { position:relative; padding-left:32px; }
+    .tracker-line {
+      position:absolute; left:10px; top:0; bottom:0;
+      width:2px; background:var(--gray-lighter);
+    }
+    .tracker-step { position:relative; margin-bottom:28px; }
+    .tracker-step:last-child { margin-bottom:0; }
+    .tracker-dot {
+      position:absolute; left:-32px; top:0;
+      width:22px; height:22px; border-radius:50%;
+      border:2px solid var(--gray-lighter); background:var(--white);
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; transition:var(--transition); z-index:1;
+    }
+    .tracker-dot.done    { border-color:var(--success); background:var(--success); color:#fff; }
+    .tracker-dot.active  { border-color:var(--primary); background:var(--primary); color:#fff; animation:pulseDot 1.5s infinite; }
+    .tracker-dot.pending { border-color:var(--gray-lighter); background:var(--white); color:var(--gray-light); }
+    @keyframes pulseDot {
+      0%,100% { box-shadow:0 0 0 0 rgba(40,116,240,0.4); }
+      50%      { box-shadow:0 0 0 8px rgba(40,116,240,0); }
+    }
+    .tracker-content { padding-left:8px; }
+    .tracker-title { font-size:14px; font-weight:700; color:var(--dark); margin-bottom:2px; }
+    .tracker-title.done    { color:var(--success); }
+    .tracker-title.active  { color:var(--primary); }
+    .tracker-title.pending { color:var(--gray-light); }
+    .tracker-sub  { font-size:12px; color:var(--gray); }
+    .tracker-time { font-size:11px; color:var(--gray-light); margin-top:2px; }
+
+    /* Estimated delivery banner */
+    .delivery-banner {
+      background:linear-gradient(135deg, var(--success) 0%, #1b5e20 100%);
+      color:#fff; border-radius:var(--radius); padding:16px 20px;
+      display:flex; align-items:center; gap:14px; margin-bottom:16px;
+    }
+    .delivery-banner i  { font-size:28px; flex-shrink:0; }
+    .delivery-banner h3 { font-size:16px; font-weight:700; margin-bottom:2px; }
+    .delivery-banner p  { font-size:13px; opacity:0.9; }
+
+    /* ============================================================
+       ORDER ITEMS LIST
+    ============================================================ */
+    .order-item {
+      display:flex; align-items:center; gap:14px;
+      padding:16px 0; border-bottom:1px solid var(--gray-lighter);
+    }
+    .order-item:last-child { border-bottom:none; }
+    .item-emoji { font-size:40px; width:64px; height:64px; background:#f9f9f9; border-radius:var(--radius); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; transition:var(--transition); }
+    .item-emoji:hover { transform:scale(1.06); }
+    .item-info { flex:1; }
+    .item-name { font-size:14px; font-weight:600; margin-bottom:3px; cursor:pointer; transition:var(--transition); }
+    .item-name:hover { color:var(--primary); }
+    .item-meta { font-size:12px; color:var(--gray); margin-bottom:6px; }
+    .item-actions-row { display:flex; gap:10px; flex-wrap:wrap; }
+    .item-mini-btn {
+      font-size:12px; font-weight:600; padding:5px 12px;
+      border-radius:4px; cursor:pointer; transition:var(--transition);
+      display:flex; align-items:center; gap:5px;
+    }
+    .btn-track  { background:var(--primary-light); color:var(--primary); border:none; }
+    .btn-track:hover  { background:var(--primary); color:#fff; }
+    .btn-return { background:#fff3e0; color:var(--secondary); border:none; }
+    .btn-return:hover { background:var(--secondary); color:#fff; }
+    .btn-review { background:#e8f5e9; color:var(--success); border:none; }
+    .btn-review:hover { background:var(--success); color:#fff; }
+    .item-price-col { text-align:right; flex-shrink:0; }
+    .item-price { font-size:16px; font-weight:800; }
+    .item-qty   { font-size:12px; color:var(--gray); margin-top:2px; }
+
+    /* ============================================================
+       PAYMENT INFO CARD
+    ============================================================ */
+    .pay-method-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--gray-lighter); }
+    .pay-method-row:last-child { border-bottom:none; }
+    .pay-method-icon { width:40px; height:40px; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .pay-method-info { flex:1; }
+    .pay-method-label { font-size:13px; color:var(--gray); }
+    .pay-method-value { font-size:14px; font-weight:700; color:var(--dark); margin-top:1px; }
+
+    /* ============================================================
+       PRICE SUMMARY CARD (RIGHT)
+    ============================================================ */
+    .summary-card {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); overflow:hidden; position:sticky; top:72px;
+    }
+    .summary-header { padding:16px 20px; border-bottom:1px solid var(--gray-lighter); font-size:13px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
+    .summary-body   { padding:20px; }
+
+    .s-row { display:flex; justify-content:space-between; padding:9px 0; font-size:14px; border-bottom:1px solid var(--gray-lighter); }
+    .s-row:last-of-type { border-bottom:none; }
+    .s-row .label { color:var(--gray-dark); }
+    .s-row .value { font-weight:600; }
+    .s-row .value.green  { color:var(--success); }
+    .s-row .value.free   { color:var(--success); font-weight:700; }
+
+    .s-total { display:flex; justify-content:space-between; padding:14px 0 0; font-size:20px; font-weight:800; margin-top:4px; }
+    .s-savings { background:#e8f5e9; color:var(--success); font-size:13px; font-weight:700; padding:12px 16px; border-radius:var(--radius); text-align:center; margin-top:14px; }
+
+    /* Address Summary */
+    .addr-summary { background:var(--bg); border-radius:var(--radius); padding:14px 16px; margin-top:16px; border-left:3px solid var(--primary); }
+    .addr-summary h4 { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+    .addr-summary p  { font-size:13px; color:var(--gray-dark); line-height:1.6; }
+    .addr-tag-sm { display:inline-block; font-size:10px; font-weight:700; background:var(--primary-light); color:var(--primary); padding:1px 6px; border-radius:3px; margin-left:4px; }
+
+    /* ============================================================
+       INVOICE DOWNLOAD / SHARE SECTION
+    ============================================================ */
+    .action-bar {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); padding:20px;
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+      margin-top:0;
+    }
+    .action-bar-title { font-size:14px; font-weight:700; margin-right:auto; }
+    .action-bar-btn {
+      padding:10px 18px; border-radius:var(--radius); font-size:13px;
+      font-weight:700; cursor:pointer; transition:var(--transition);
+      display:flex; align-items:center; gap:7px;
+    }
+    .btn-invoice  { background:var(--primary-light); color:var(--primary); border:none; }
+    .btn-invoice:hover  { background:var(--primary); color:#fff; }
+    .btn-share    { background:#e8f5e9; color:var(--success); border:none; }
+    .btn-share:hover    { background:var(--success); color:#fff; }
+    .btn-whatsapp { background:#dcf8c6; color:#128c7e; border:none; }
+    .btn-whatsapp:hover { background:#25d366; color:#fff; }
+    .btn-email    { background:#fce4ec; color:#c62828; border:none; }
+    .btn-email:hover    { background:#c62828; color:#fff; }
+
+    /* ============================================================
+       SIMILAR PRODUCTS
+    ============================================================ */
+    .similar-section { background:var(--white); border-radius:var(--radius-lg); box-shadow:var(--card-shadow); overflow:hidden; margin-top:20px; padding-bottom:16px; }
+    .similar-header  { padding:16px 20px; border-bottom:1px solid var(--gray-lighter); display:flex; align-items:center; justify-content:space-between; }
+    .similar-header h2 { font-size:16px; font-weight:700; }
+    .view-all-link { color:var(--primary); font-size:13px; font-weight:600; background:var(--primary-light); padding:6px 14px; border-radius:20px; transition:var(--transition); }
+    .view-all-link:hover { background:var(--primary); color:#fff; }
+
+    .similar-row { display:flex; overflow-x:auto; scrollbar-width:none; }
+    .similar-row::-webkit-scrollbar { display:none; }
+    .similar-card {
+      min-width:160px; max-width:160px; padding:14px 12px;
+      border-right:1px solid var(--gray-lighter); flex-shrink:0;
+      cursor:pointer; transition:var(--transition); text-align:center;
+    }
+    .similar-card:last-child { border-right:none; }
+    .similar-card:hover { background:var(--bg); transform:translateY(-2px); }
+    .similar-emoji { font-size:44px; display:block; margin-bottom:8px; }
+    .similar-name  { font-size:12px; font-weight:600; margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .similar-price { font-size:13px; font-weight:700; }
+    .similar-disc  { font-size:11px; color:var(--success); font-weight:600; }
+
+    /* ============================================================
+       NEWSLETTER / LOYALTY
+    ============================================================ */
+    .loyalty-card {
+      background:linear-gradient(135deg, var(--primary) 0%, #0d47a1 100%);
+      border-radius:var(--radius-lg); padding:28px 32px; color:#fff;
+      display:flex; align-items:center; gap:24px; margin-top:20px;
+      box-shadow:var(--card-shadow); flex-wrap:wrap;
+    }
+    .loyalty-icon { font-size:52px; flex-shrink:0; }
+    .loyalty-content { flex:1; }
+    .loyalty-content h3 { font-size:18px; font-weight:800; margin-bottom:6px; }
+    .loyalty-content p  { font-size:13px; opacity:0.85; line-height:1.6; }
+    .loyalty-pts { font-size:28px; font-weight:800; color:var(--warning); }
+    .loyalty-pts span { font-size:13px; font-weight:400; opacity:0.8; color:#fff; display:block; }
+
+    /* ============================================================
+       REVIEW PROMPT CARD
+    ============================================================ */
+    .review-prompt {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); padding:24px; margin-top:20px;
+      text-align:center;
+    }
+    .review-prompt h3 { font-size:17px; font-weight:700; margin-bottom:6px; }
+    .review-prompt p  { font-size:13px; color:var(--gray); margin-bottom:16px; }
+    .stars-row { display:flex; justify-content:center; gap:8px; margin-bottom:16px; }
+    .star-btn { font-size:32px; cursor:pointer; transition:var(--transition); filter:grayscale(1); }
+    .star-btn:hover, .star-btn.active { filter:grayscale(0); transform:scale(1.2); }
+    .review-input {
+      width:100%; padding:12px 14px; border:1.5px solid var(--gray-lighter);
+      border-radius:var(--radius); font-size:14px; resize:vertical; min-height:80px;
+      margin-bottom:12px; font-family:var(--font); outline:none; transition:var(--transition);
+    }
+    .review-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(40,116,240,0.1); }
+    .submit-review-btn {
+      padding:11px 28px; background:var(--primary); color:#fff;
+      border:none; border-radius:var(--radius); font-size:14px; font-weight:700;
+      cursor:pointer; transition:var(--transition);
+    }
+    .submit-review-btn:hover { background:var(--primary-dark); }
+
+    /* ============================================================
+       HELP & SUPPORT
+    ============================================================ */
+    .help-section {
+      background:var(--white); border-radius:var(--radius-lg);
+      box-shadow:var(--card-shadow); padding:20px; margin-top:20px;
+    }
+    .help-section h3 { font-size:15px; font-weight:700; margin-bottom:14px; }
+    .help-options { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .help-btn {
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      padding:16px 12px; border:1.5px solid var(--gray-lighter); border-radius:var(--radius);
+      cursor:pointer; transition:var(--transition); text-align:center;
+      font-size:12px; font-weight:600; color:var(--gray-dark);
+    }
+    .help-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); transform:translateY(-2px); }
+    .help-btn i { font-size:22px; color:var(--primary); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    #footer { background:#172337; color:rgba(255,255,255,0.8); padding:28px 0 16px; margin-top:32px; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:14px; }
+    .footer-logo  { font-size:18px; font-weight:800; color:#fff; }
+    .footer-logo span { color:#ffc107; }
+    .footer-links { display:flex; gap:20px; flex-wrap:wrap; }
+    .footer-links a { font-size:12px; color:rgba(255,255,255,0.6); transition:var(--transition); }
+    .footer-links a:hover { color:#fff; }
+    .footer-copy { font-size:12px; color:rgba(255,255,255,0.4); text-align:center; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width:900px) {
+      .content-grid { grid-template-columns:1fr; }
+      .summary-card { position:static; }
+      .help-options { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width:600px) {
+      .success-hero { padding:32px 20px; }
+      .success-hero h1 { font-size:22px; }
+      .quick-actions { flex-direction:column; align-items:stretch; }
+      .quick-btn { justify-content:center; }
+      .order-id-wrap { flex-direction:column; gap:8px; text-align:center; }
+      .loyalty-card { flex-direction:column; text-align:center; }
+      .help-options { grid-template-columns:1fr 1fr; }
+      .navbar-search { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Toast -->
+  <div id="toast-container"></div>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <nav id="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div>
+          <div class="logo-text">Shop<span>Kart</span></div>
+          <div class="logo-tagline">⚡ Explore Plus</div>
+        </div>
+      </a>
+
+      <div class="navbar-search">
+        <div class="search-wrapper">
+          <input type="text" id="search-input" placeholder="Search for products, brands and more" />
+          <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+      </div>
+
+      <div class="navbar-actions">
+        <a href="orders.html" class="nav-btn">
+          <i class="fa-solid fa-box"></i><span>Orders</span>
+        </a>
+        <a href="index.html" class="nav-btn">
+          <i class="fa-solid fa-house"></i><span>Home</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       PROGRESS STEPS — ALL DONE
+  ============================================================ -->
+  <div class="steps-bar">
+    <div class="container">
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num"><i class="fa-solid fa-check" style="font-size:10px;"></i></div>
+          <span>Cart</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num"><i class="fa-solid fa-check" style="font-size:10px;"></i></div>
+          <span>Address</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num"><i class="fa-solid fa-check" style="font-size:10px;"></i></div>
+          <span>Payment</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num"><i class="fa-solid fa-check" style="font-size:10px;"></i></div>
+          <span>Confirmed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main class="success-page">
+    <div class="container">
+
+      <!-- ────────────────────────────────────────
+           SUCCESS HERO CARD
+      ──────────────────────────────────────── -->
+      <div class="success-hero">
+        <!-- Animated Ring -->
+        <div class="success-ring">
+          <svg class="ring-svg" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#e8f5e9" stroke-width="4"/>
+            <circle class="ring-circle" cx="60" cy="60" r="50"/>
+          </svg>
+          <div class="ring-check">✅</div>
+        </div>
+
+        <h1>Order Placed Successfully! 🎉</h1>
+        <p class="sub-text">
+          Thank you for shopping with <strong>ShopKart!</strong><br/>
+          Your order has been confirmed and is being processed.
+          You'll receive an SMS &amp; email confirmation shortly.
+        </p>
+
+        <!-- Order ID -->
+        <div class="order-id-wrap">
+          <div>
+            <div class="order-id-label">Order ID</div>
+            <div class="order-id-value" id="order-id-display">SK2025XXXXXXXX</div>
+          </div>
+          <button class="copy-btn" onclick="copyOrderId()">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="quick-btn quick-btn-primary" onclick="location.href='orders.html'">
+            <i class="fa-solid fa-box"></i> Track My Order
+          </button>
+          <button class="quick-btn quick-btn-outline" onclick="downloadInvoice()">
+            <i class="fa-solid fa-file-invoice"></i> Download Invoice
+          </button>
+          <button class="quick-btn quick-btn-accent" onclick="location.href='products.html'">
+            <i class="fa-solid fa-bag-shopping"></i> Continue Shopping
+          </button>
+        </div>
+      </div>
+
+      <!-- ────────────────────────────────────────
+           ACTION BAR
+      ──────────────────────────────────────── -->
+      <div class="action-bar" style="margin-bottom:20px;">
+        <span class="action-bar-title">
+          <i class="fa-solid fa-share-nodes" style="color:var(--primary);"></i>
+          Share your order:
+        </span>
+        <button class="action-bar-btn btn-invoice" onclick="downloadInvoice()">
+          <i class="fa-solid fa-download"></i> Invoice PDF
+        </button>
+        <button class="action-bar-btn btn-whatsapp" onclick="shareWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </button>
+        <button class="action-bar-btn btn-email" onclick="shareEmail()">
+          <i class="fa-solid fa-envelope"></i> Email
+        </button>
+        <button class="action-bar-btn btn-share" onclick="shareOrder()">
+          <i class="fa-solid fa-link"></i> Copy Link
+        </button>
+      </div>
+
+      <!-- ────────────────────────────────────────
+           CONTENT GRID
+      ──────────────────────────────────────── -->
+      <div class="content-grid">
+
+        <!-- LEFT COLUMN -->
+        <div>
+
+          <!-- DELIVERY TRACKER -->
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h2><i class="fa-solid fa-truck-fast"></i> Delivery Tracking</h2>
+              <span style="font-size:12px; color:var(--gray);">Updates via SMS</span>
+            </div>
+            <div class="detail-card-body">
+
+              <!-- Estimated Delivery Banner -->
+              <div class="delivery-banner">
+                <i class="fa-solid fa-truck-fast"></i>
+                <div>
+                  <h3>Estimated Delivery: <span id="delivery-date">Loading...</span></h3>
+                  <p>Standard free delivery — order confirmed &amp; being packed now</p>
+                </div>
+              </div>
+
+              <!-- Tracker Steps -->
+              <div class="tracker-wrap">
+                <div class="tracker">
+                  <div class="tracker-line"></div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot done"><i class="fa-solid fa-check" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title done">Order Placed</div>
+                      <div class="tracker-sub">Your order has been placed successfully</div>
+                      <div class="tracker-time" id="tracker-placed">Just now</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot done"><i class="fa-solid fa-check" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title done">Payment Confirmed</div>
+                      <div class="tracker-sub">Payment received &amp; verified successfully</div>
+                      <div class="tracker-time" id="tracker-paid">Just now</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot active"><i class="fa-solid fa-gear" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title active">Processing Order</div>
+                      <div class="tracker-sub">Your items are being packed at the warehouse</div>
+                      <div class="tracker-time" id="tracker-proc">Expected: Today, 6 PM</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot pending"><i class="fa-solid fa-box" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title pending">Shipped</div>
+                      <div class="tracker-sub">Order will be handed to delivery partner</div>
+                      <div class="tracker-time" id="tracker-ship">Expected: Tomorrow</div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot pending"><i class="fa-solid fa-house" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title pending">Out for Delivery</div>
+                      <div class="tracker-sub">Delivery agent will contact before arriving</div>
+                      <div class="tracker-time" id="tracker-ofd">Expected: <span id="tracker-ofd-date">–</span></div>
+                    </div>
+                  </div>
+
+                  <div class="tracker-step">
+                    <div class="tracker-dot pending"><i class="fa-solid fa-circle-check" style="font-size:9px;"></i></div>
+                    <div class="tracker-content">
+                      <div class="tracker-title pending">Delivered</div>
+                      <div class="tracker-sub">Order delivered to your doorstep</div>
+                      <div class="tracker-time" id="tracker-delivered">Expected: <span id="tracker-del-date">–</span></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ORDER ITEMS -->
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h2><i class="fa-solid fa-box-open"></i> Order Items</h2>
+              <span style="font-size:13px; color:var(--gray);" id="items-count-label">0 items</span>
+            </div>
+            <div class="detail-card-body" id="order-items-body">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- PAYMENT INFO -->
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h2><i class="fa-solid fa-receipt"></i> Payment Information</h2>
+            </div>
+            <div class="detail-card-body">
+              <div class="pay-method-row">
+                <div class="pay-method-icon">💳</div>
+                <div class="pay-method-info">
+                  <div class="pay-method-label">Payment Method</div>
+                  <div class="pay-method-value" id="pay-method-display">–</div>
+                </div>
+              </div>
+              <div class="pay-method-row">
+                <div class="pay-method-icon" style="background:#e8f5e9;">✅</div>
+                <div class="pay-method-info">
+                  <div class="pay-method-label">Payment Status</div>
+                  <div class="pay-method-value" style="color:var(--success);">PAID — Successful</div>
+                </div>
+              </div>
+              <div class="pay-method-row">
+                <div class="pay-method-icon" style="background:#fff3e0;">📅</div>
+                <div class="pay-method-info">
+                  <div class="pay-method-label">Transaction Date & Time</div>
+                  <div class="pay-method-value" id="txn-datetime">–</div>
+                </div>
+              </div>
+              <div class="pay-method-row">
+                <div class="pay-method-icon" style="background:#fce4ec;">🔖</div>
+                <div class="pay-method-info">
+                  <div class="pay-method-label">Transaction ID</div>
+                  <div class="pay-method-value" id="txn-id" style="font-family:monospace; font-size:13px;">–</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REVIEW PROMPT -->
+          <div class="review-prompt">
+            <h3>⭐ Rate Your Shopping Experience</h3>
+            <p>Your feedback helps us improve ShopKart for millions of customers!</p>
+            <div class="stars-row" id="stars-row">
+              <span class="star-btn" data-val="1" onclick="rateStar(1)">⭐</span>
+              <span class="star-btn" data-val="2" onclick="rateStar(2)">⭐</span>
+              <span class="star-btn" data-val="3" onclick="rateStar(3)">⭐</span>
+              <span class="star-btn" data-val="4" onclick="rateStar(4)">⭐</span>
+              <span class="star-btn" data-val="5" onclick="rateStar(5)">⭐</span>
+            </div>
+            <textarea class="review-input" id="review-text" placeholder="Share your thoughts about your shopping experience..."></textarea>
+            <br/>
+            <button class="submit-review-btn" onclick="submitReview()">
+              <i class="fa-solid fa-paper-plane"></i> Submit Review
+            </button>
+          </div>
+
+          <!-- HELP & SUPPORT -->
+          <div class="help-section">
+            <h3>🎧 Need Help with Your Order?</h3>
+            <div class="help-options">
+              <div class="help-btn" onclick="location.href='orders.html'">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Track Order</span>
+              </div>
+              <div class="help-btn" onclick="showToast('Return request initiated!','info')">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Return / Exchange</span>
+              </div>
+              <div class="help-btn" onclick="location.href='contact.html'">
+                <i class="fa-solid fa-headset"></i>
+                <span>Contact Support</span>
+              </div>
+              <div class="help-btn" onclick="downloadInvoice()">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Download Invoice</span>
+              </div>
+              <div class="help-btn" onclick="showToast('Cancellation request submitted!','info')">
+                <i class="fa-solid fa-xmark-circle"></i>
+                <span>Cancel Order</span>
+              </div>
+              <div class="help-btn" onclick="location.href='contact.html'">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>Live Chat</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+
+          <!-- PRICE SUMMARY -->
+          <div class="summary-card">
+            <div class="summary-header">Order Summary</div>
+            <div class="summary-body">
+
+              <div class="s-row">
+                <span class="label">Price (<span id="s-count">0</span> items)</span>
+                <span class="value" id="s-subtotal">₹0</span>
+              </div>
+              <div class="s-row">
+                <span class="label">Discount</span>
+                <span class="value green" id="s-discount">-₹0</span>
+              </div>
+              <div class="s-row">
+                <span class="label">Coupon Discount</span>
+                <span class="value green" id="s-coupon">-₹0</span>
+              </div>
+              <div class="s-row">
+                <span class="label">Delivery Charges</span>
+                <span class="value free" id="s-delivery">FREE</span>
+              </div>
+              <div class="s-row">
+                <span class="label">Platform Fee</span>
+                <span class="value">₹20</span>
+              </div>
+
+              <div class="s-total">
+                <span>Total Paid</span>
+                <span id="s-total">₹0</span>
+              </div>
+
+              <div class="s-savings" id="s-savings">🎉 You saved ₹0 on this order!</div>
+
+              <!-- Delivery Address -->
+              <div class="addr-summary">
+                <h4><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> Delivering To</h4>
+                <p id="addr-display">Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- LOYALTY POINTS -->
+          <div class="loyalty-card" style="margin-top:20px;">
+            <div class="loyalty-icon">🏅</div>
+            <div class="loyalty-content">
+              <h3>ShopKart Rewards Earned!</h3>
+              <p>You've earned loyalty points from this purchase. Redeem them on your next order!</p>
+              <div class="loyalty-pts" id="loyalty-pts">
+                +0 Points
+                <span>Credited to your wallet within 24 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMILAR PRODUCTS -->
+          <div class="similar-section">
+            <div class="similar-header">
+              <h2>🛍️ Buy Again / Similar</h2>
+              <a href="products.html" class="view-all-link">View All</a>
+            </div>
+            <div class="similar-row" id="similar-row">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">Shop<span>Kart</span></div>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="orders.html">My Orders</a>
+          <a href="products.html">Products</a>
+          <a href="contact.html">Help</a>
+          <a href="#">Return Policy</a>
+        </div>
+      </div>
+      <div class="footer-copy">© 2025 ShopKart Pvt. Ltd. All Rights Reserved. Made with ❤️ in India 🇮🇳</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+       SIMILAR PRODUCTS DATA
+    ============================================================ */
+    const SIMILAR = [
+      { id:1,  name:"Samsung Galaxy S24 Ultra", emoji:"📱", price:79999,  disc:65 },
+      { id:3,  name:"Sony WH-1000XM5",          emoji:"🎧", price:19990,  disc:40 },
+      { id:5,  name:"Apple Watch Series 9",     emoji:"⌚", price:29900,  disc:50 },
+      { id:7,  name:"Sony PlayStation 5",        emoji:"🎮", price:34990,  disc:60 },
+      { id:6,  name:"Nike Air Force 1",          emoji:"👟", price:5295,   disc:34 },
+      { id:18, name:"Prestige Cookware Set",     emoji:"🍳", price:3999,   disc:47 },
+      { id:19, name:"Atomic Habits Book",        emoji:"📚", price:349,    disc:42 },
+      { id:20, name:"Resistance Bands Set",      emoji:"🏋️", price:699,   disc:53 },
+    ];
+
+    /* ============================================================
+       STATE
+    ============================================================ */
+    let orderData  = {};
+    let orderTotal = {};
+    let userRating = 0;
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+    function showToast(msg, type="success") {
+      const icons = { success:"fa-circle-check", error:"fa-circle-xmark", info:"fa-circle-info" };
+      const c = document.getElementById("toast-container");
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.innerHTML = `<i class="fa-solid ${icons[type]}"></i> ${msg}`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3200);
+    }
+
+    function formatPrice(n) {
+      return "₹" + Math.max(0, parseInt(n || 0)).toLocaleString("en-IN");
+    }
+
+    function formatDateTime(ts) {
+      const d = new Date(ts || Date.now());
+      return d.toLocaleString("en-IN", { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
+    }
+
+    function formatDate(daysAhead) {
+      const d = new Date(Date.now() + daysAhead * 86400000);
+      return d.toLocaleDateString("en-IN", { weekday:"long", day:"numeric", month:"long" });
+    }
+
+    function generateTxnId() {
+      return "TXN" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2,6).toUpperCase();
+    }
+
+    /* ============================================================
+       CONFETTI
+    ============================================================ */
+    function launchConfetti() {
+      const canvas = document.getElementById("confetti-canvas");
+      const ctx    = canvas.getContext("2d");
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const pieces = [];
+      const colors = ["#2874f0","#fb641b","#26a541","#ffc107","#ff4444","#9c27b0","#00bcd4","#ff6f00"];
+
+      for (let i = 0; i < 160; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: Math.random() * 10 + 5,
+          h: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360,
+          speed: Math.random() * 3 + 1.5,
+          swing: Math.random() * 3 - 1.5,
+          alpha: 1
+        });
+      }
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+          p.y    += p.speed;
+          p.x    += p.swing;
+          p.rot  += 2;
+          p.alpha = Math.max(0, 1 - p.y / canvas.height);
+        });
+        frame++;
+        if (frame < 200) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw();
+
+      window.addEventListener("resize", () => {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    }
+
+    /* ============================================================
+       COPY ORDER ID
+    ============================================================ */
+    function copyOrderId() {
+      const id = document.getElementById("order-id-display").textContent;
+      navigator.clipboard.writeText(id).then(() => {
+        showToast("📋 Order ID copied!", "success");
+      }).catch(() => {
+        showToast("Order ID: " + id, "info");
+      });
+    }
+
+    /* ============================================================
+       INVOICE DOWNLOAD
+    ============================================================ */
+    function downloadInvoice() {
+      showToast("📄 Generating invoice PDF...", "info");
+      setTimeout(() => {
+        showToast("✅ Invoice downloaded successfully!", "success");
+        location.href = "invoice.html?id=" + (orderData.id || "SK2025");
+      }, 1500);
+    }
+
+    /* ============================================================
+       SHARE FUNCTIONS
+    ============================================================ */
+    function shareWhatsApp() {
+      const msg = encodeURIComponent(`🛒 Just placed an order on ShopKart!\nOrder ID: ${orderData.id}\nShop now: https://shopkart.in`);
+      window.open(`https://wa.me/?text=${msg}`, "_blank");
+    }
+
+    function shareEmail() {
+      const subject = encodeURIComponent("My ShopKart Order Confirmation");
+      const body    = encodeURIComponent(`Hi,\n\nI just placed an order on ShopKart!\n\nOrder ID: ${orderData.id}\nTotal: ${formatPrice(orderTotal.total)}\n\nShop at ShopKart: https://shopkart.in`);
+      window.open(`mailto:?subject=${subject}&body=${body}`);
+    }
+
+    function shareOrder() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast("🔗 Order link copied!", "success");
+      });
+    }
+
+    /* ============================================================
+       REVIEW
+    ============================================================ */
+    function rateStar(val) {
+      userRating = val;
+      document.querySelectorAll(".star-btn").forEach((s, i) => {
+        s.classList.toggle("active", i < val);
+      });
+      showToast(`You rated ${val} star${val > 1 ? "s" : ""}!`, "info");
+    }
+
+    function submitReview() {
+      if (!userRating) {
+        showToast("Please select a star rating first", "error");
+        return;
+      }
+      const text = document.getElementById("review-text").value.trim();
+      showToast("🌟 Thank you for your review! +" + (userRating * 10) + " bonus points earned!", "success");
+      document.getElementById("review-text").value = "";
+      document.querySelectorAll(".star-btn").forEach(s => s.classList.remove("active"));
+      userRating = 0;
+    }
+
+    /* ============================================================
+       RENDER ORDER ITEMS
+    ============================================================ */
+    function renderOrderItems() {
+      const items = orderData.items || [];
+      const body  = document.getElementById("order-items-body");
+      body.innerHTML = "";
+      document.getElementById("items-count-label").textContent = items.length + " item" + (items.length !== 1 ? "s" : "");
+
+      if (items.length === 0) {
+        body.innerHTML = `<div style="text-align:center;padding:30px;color:var(--gray);">No items found</div>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const el = document.createElement("div");
+        el.className = "order-item";
+        el.innerHTML = `
+          <div class="item-emoji" onclick="location.href='product-details.html?id=${item.id}'">${item.emoji || "📦"}</div>
+          <div class="item-info">
+            <div class="item-name" onclick="location.href='product-details.html?id=${item.id}'">${item.name}</div>
+            <div class="item-meta">
+              Qty: ${item.qty || 1}
+              ${item.storage ? ` &nbsp;|&nbsp; ${item.storage}` : ""}
+              &nbsp;|&nbsp; Seller: ShopKart Official
+            </div>
+            <div class="item-actions-row">
+              <button class="item-mini-btn btn-track" onclick="location.href='orders.html'">
+                <i class="fa-solid fa-magnifying-glass"></i> Track
+              </button>
+              <button class="item-mini-btn btn-return" onclick="showToast('Return request initiated!','info')">
+                <i class="fa-solid fa-rotate-left"></i> Return
+              </button>
+              <button class="item-mini-btn btn-review" onclick="location.href='product-details.html?id=${item.id}'">
+                <i class="fa-solid fa-star"></i> Rate Product
+              </button>
+            </div>
+          </div>
+          <div class="item-price-col">
+            <div class="item-price">${formatPrice((item.price || 0) * (item.qty || 1))}</div>
+            <div class="item-qty">Qty: ${item.qty || 1}</div>
+          </div>
+        `;
+        body.appendChild(el);
+      });
+    }
+
+    /* ============================================================
+       RENDER SUMMARY
+    ============================================================ */
+    function renderSummary() {
+      const items    = orderData.items || [];
+      const addr     = orderData.address || null;
+      const delivery = orderData.delivery || { cost:0 };
+      const couponD  = orderTotal.couponD || 0;
+
+      let subtotal = 0; let discount = 0; let count = 0;
+      items.forEach(item => {
+        subtotal += (item.original || item.price || 0) * (item.qty || 1);
+        discount += ((item.original || item.price || 0) - (item.price || 0)) * (item.qty || 1);
+        count    += (item.qty || 1);
+      });
+
+      const deliveryCost = orderTotal.delivery || delivery.cost || 0;
+      const total        = orderTotal.total || (subtotal - discount - couponD + deliveryCost + 20);
+      const savings      = discount + couponD + (deliveryCost === 0 ? 49 : 0);
+
+      document.getElementById("s-count").textContent    = count;
+      document.getElementById("s-subtotal").textContent = formatPrice(subtotal);
+      document.getElementById("s-discount").textContent = `-${formatPrice(discount)}`;
+      document.getElementById("s-coupon").textContent   = couponD > 0 ? `-${formatPrice(couponD)}` : "-₹0";
+      document.getElementById("s-delivery").textContent = deliveryCost === 0 ? "FREE" : formatPrice(deliveryCost);
+      document.getElementById("s-total").textContent    = formatPrice(Math.max(0, total));
+      document.getElementById("s-savings").textContent  = `🎉 You saved ${formatPrice(savings)} on this order!`;
+
+      // Loyalty points (1pt per ₹10)
+      const pts = Math.floor(total / 10);
+      document.getElementById("loyalty-pts").innerHTML = `+${pts} Points<span>Credited to your wallet within 24 hrs</span>`;
+
+      // Address
+      if (addr) {
+        document.getElementById("addr-display").innerHTML = `
+          <strong>${addr.name} <span class="addr-tag-sm">${addr.tag || "HOME"}</span></strong><br/>
+          ${addr.street}, ${addr.city}, ${addr.state} – ${addr.pincode}<br/>
+          <i class="fa-solid fa-phone" style="font-size:10px;"></i> ${addr.phone}
+        `;
+      } else {
+        document.getElementById("addr-display").textContent = "Address not available";
+      }
+    }
+
+    /* ============================================================
+       RENDER SIMILAR PRODUCTS
+    ============================================================ */
+    function renderSimilar() {
+      const row = document.getElementById("similar-row");
+      const usedIds = (orderData.items || []).map(i => i.id);
+      const items   = SIMILAR.filter(s => !usedIds.includes(s.id)).slice(0, 8);
+      row.innerHTML = "";
+      items.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "similar-card";
+        card.onclick   = () => location.href = `product-details.html?id=${p.id}`;
+        card.innerHTML = `
+          <span class="similar-emoji">${p.emoji}</span>
+          <div class="similar-name">${p.name}</div>
+          <div class="similar-price">${formatPrice(p.price)}</div>
+          <div class="similar-disc">${p.disc}% off</div>
+        `;
+        row.appendChild(card);
+      });
+    }
+
+    /* ============================================================
+       SET TRACKER DATES
+    ============================================================ */
+    function setTrackerDates() {
+      const now = new Date();
+      const pad = n => n.toString().padStart(2,"0");
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const dateStr = now.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+
+      document.getElementById("tracker-placed").textContent = `${dateStr}, ${timeStr}`;
+      document.getElementById("tracker-paid").textContent   = `${dateStr}, ${timeStr}`;
+      document.getElementById("tracker-proc").textContent   = `Expected: Today by 8:00 PM`;
+
+      const shipDate = new Date(Date.now() + 1 * 86400000);
+      const delDate  = new Date(Date.now() + 4 * 86400000);
+      const ofdDate  = new Date(Date.now() + 3 * 86400000);
+
+      document.getElementById("tracker-ship").textContent = `Expected: ${shipDate.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short"})}`;
+      document.getElementById("tracker-ofd-date").textContent  = ofdDate.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short"});
+      document.getElementById("tracker-del-date").textContent  = delDate.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short"});
+      document.getElementById("delivery-date").textContent     = formatDate(4);
+    }
+
+    /* ============================================================
+       SEARCH
+    ============================================================ */
+    document.getElementById("search-btn").addEventListener("click", () => {
+      const q = document.getElementById("search-input").value.trim();
+      if (q) location.href = `products.html?q=${encodeURIComponent(q)}`;
+    });
+    document.getElementById("search-input").addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        const q = e.target.value.trim();
+        if (q) location.href = `products.html?q=${encodeURIComponent(q)}`;
+      }
+    });
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    window.onload = () => {
+      // Load order data
+      orderData  = JSON.parse(localStorage.getItem("sk_last_order") || "{}");
+      orderTotal = JSON.parse(localStorage.getItem("sk_order_total") || "{}");
+
+      // If no order, show fallback
+      if (!orderData.id) {
+        orderData = {
+          id: "SK2025DEMO001",
+          method: "UPI (GPay)",
+          items: [
+            { id:1, name:"Samsung Galaxy S24 Ultra 5G 256GB", emoji:"📱", price:79999, original:134999, qty:1 },
+            { id:3, name:"Sony WH-1000XM5 Wireless Headphones", emoji:"🎧", price:19990, original:34990, qty:2 }
+          ],
+          address: { name:"Rahul Kumar", tag:"HOME", phone:"9876543210", street:"Flat 4B, Sunrise Apartments", city:"Mumbai", state:"Maharashtra", pincode:"400058" },
+          delivery: { cost:0, label:"Standard Delivery" },
+          total: 119979,
+          timestamp: Date.now()
+        };
+        orderTotal = { total:119979, discount:69999, couponD:0, delivery:0 };
+      }
+
+      // Display order ID
+      document.getElementById("order-id-display").textContent = orderData.id;
+
+      // Payment info
+      document.getElementById("pay-method-display").textContent = orderData.method || "UPI";
+      document.getElementById("txn-datetime").textContent = formatDateTime(orderData.timestamp);
+      document.getElementById("txn-id").textContent = generateTxnId();
+
+      // Render sections
+      renderOrderItems();
+      renderSummary();
+      renderSimilar();
+      setTrackerDates();
+
+      // Launch confetti
+      launchConfetti();
+
+      // Toast
+      setTimeout(() => showToast("🎉 Order placed! Check your SMS for updates.", "success"), 600);
+      setTimeout(() => showToast("📱 Estimated delivery: " + formatDate(4), "info"), 2200);
+
+      console.log("%c🎉 ShopKart Order Success Page Loaded", "color:#26a541; font-size:14px; font-weight:bold;");
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+profile.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ShopElite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html"><i class="fas fa-shopping-bag"></i> ShopElite</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="location.href='wishlist.html'">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge">4</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon active" onclick="location.href='profile.html'">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Profile Layout -->
+    <div class="profile-layout">
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="profile-avatar-section">
+                <div class="avatar-wrapper">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-avatar" id="profileAvatar">
+                    <button class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="avatarInput" hidden accept="image/*" onchange="previewAvatar(event)">
+                </div>
+                <div class="profile-name-info">
+                    <h2 id="sidebarName">Alex Johnson</h2>
+                    <p id="sidebarEmail">alex.johnson@email.com</p>
+                    <div class="member-badge">
+                        <i class="fas fa-crown"></i> Premium Member
+                    </div>
+                </div>
+                <div class="profile-stats-mini">
+                    <div class="mini-stat">
+                        <span class="mini-stat-value">24</span>
+                        <span class="mini-stat-label">Orders</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value">$2.4k</span>
+                        <span class="mini-stat-label">Spent</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value">1,240</span>
+                        <span class="mini-stat-label">Points</span>
+                    </div>
+                </div>
+            </div>
+            <nav class="profile-nav">
+                <a href="#" class="profile-nav-item active" onclick="switchTab('overview', this)">
+                    <i class="fas fa-tachometer-alt"></i> Overview
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('orders', this)">
+                    <i class="fas fa-box"></i> My Orders
+                    <span class="nav-badge">3</span>
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('personal', this)">
+                    <i class="fas fa-user-edit"></i> Personal Info
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('addresses', this)">
+                    <i class="fas fa-map-marker-alt"></i> Addresses
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('payment', this)">
+                    <i class="fas fa-credit-card"></i> Payment Methods
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('security', this)">
+                    <i class="fas fa-shield-alt"></i> Security
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('notifications', this)">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="#" class="profile-nav-item" onclick="switchTab('rewards', this)">
+                    <i class="fas fa-gift"></i> Rewards
+                    <span class="nav-badge new">NEW</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="index.html" class="profile-nav-item logout" onclick="confirmLogout(event)">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="profile-main">
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="tab-overview">
+                <div class="tab-header">
+                    <h1>Welcome back, Alex! 👋</h1>
+                    <p>Here's what's happening with your account</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="overview-stats">
+                    <div class="stat-card blue">
+                        <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value">24</span>
+                            <span class="stat-label">Total Orders</span>
+                        </div>
+                        <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 12%</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value">21</span>
+                            <span class="stat-label">Delivered</span>
+                        </div>
+                        <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 8%</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">In Transit</span>
+                        </div>
+                        <div class="stat-trend neutral">Active</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="stat-icon"><i class="fas fa-star"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-value">1,240</span>
+                            <span class="stat-label">Reward Points</span>
+                        </div>
+                        <div class="stat-trend up"><i class="fas fa-arrow-up"></i> 240</div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="overview-section">
+                    <div class="section-header-row">
+                        <h3>Recent Orders</h3>
+                        <button class="btn-link" onclick="switchTab('orders', document.querySelector('[onclick*=\"orders\"]'))">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="recent-orders-list">
+                        <div class="order-row">
+                            <div class="order-img">
+                                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=60&h=60&fit=crop" alt="">
+                            </div>
+                            <div class="order-details">
+                                <span class="order-id">#ORD-001234</span>
+                                <span class="order-name">Premium Luxury Watch</span>
+                                <span class="order-date">Dec 15, 2024</span>
+                            </div>
+                            <div class="order-status delivered">Delivered</div>
+                            <div class="order-amount">$199.99</div>
+                            <button class="btn btn-sm btn-outline" onclick="location.href='invoice.html'">Invoice</button>
+                        </div>
+                        <div class="order-row">
+                            <div class="order-img">
+                                <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=60&h=60&fit=crop" alt="">
+                            </div>
+                            <div class="order-details">
+                                <span class="order-id">#ORD-001235</span>
+                                <span class="order-name">Wireless Headphones</span>
+                                <span class="order-date">Dec 20, 2024</span>
+                            </div>
+                            <div class="order-status transit">In Transit</div>
+                            <div class="order-amount">$299.99</div>
+                            <button class="btn btn-sm btn-outline" onclick="location.href='invoice.html'">Track</button>
+                        </div>
+                        <div class="order-row">
+                            <div class="order-img">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=60&h=60&fit=crop" alt="">
+                            </div>
+                            <div class="order-details">
+                                <span class="order-id">#ORD-001236</span>
+                                <span class="order-name">Running Shoes Pro</span>
+                                <span class="order-date">Dec 22, 2024</span>
+                            </div>
+                            <div class="order-status processing">Processing</div>
+                            <div class="order-amount">$149.99</div>
+                            <button class="btn btn-sm btn-outline" onclick="location.href='invoice.html'">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loyalty Progress -->
+                <div class="overview-section loyalty-section">
+                    <div class="loyalty-header">
+                        <div>
+                            <h3><i class="fas fa-crown text-gold"></i> Loyalty Status</h3>
+                            <p>You're a <strong>Gold Member</strong></p>
+                        </div>
+                        <div class="loyalty-points">
+                            <span class="points-value">1,240</span>
+                            <span class="points-label">points</span>
+                        </div>
+                    </div>
+                    <div class="loyalty-progress">
+                        <div class="progress-labels">
+                            <span><i class="fas fa-medal"></i> Gold</span>
+                            <span><i class="fas fa-gem"></i> Platinum (2,000 pts)</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:62%"></div>
+                        </div>
+                        <p class="progress-text">760 more points to reach Platinum status!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-content" id="tab-orders">
+                <div class="tab-header">
+                    <h1>My Orders</h1>
+                    <div class="orders-filter">
+                        <select class="form-select" onchange="filterOrders(this.value)">
+                            <option value="all">All Orders</option>
+                            <option value="processing">Processing</option>
+                            <option value="transit">In Transit</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="orders-table-wrapper">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#ORD-001234</strong></td>
+                                <td>
+                                    <div class="table-product">
+                                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=40&h=40&fit=crop" alt="">
+                                        <span>Premium Luxury Watch</span>
+                                    </div>
+                                </td>
+                                <td>Dec 15, 2024</td>
+                                <td><strong>$199.99</strong></td>
+                                <td><span class="status-pill delivered">Delivered</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline" onclick="location.href='invoice.html'">Invoice</button>
+                                    <button class="btn btn-sm btn-primary" onclick="reorder(1)">Reorder</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-001235</strong></td>
+                                <td>
+                                    <div class="table-product">
+                                        <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=40&h=40&fit=crop" alt="">
+                                        <span>Wireless Headphones</span>
+                                    </div>
+                                </td>
+                                <td>Dec 20, 2024</td>
+                                <td><strong>$299.99</strong></td>
+                                <td><span class="status-pill transit">In Transit</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Track</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-001236</strong></td>
+                                <td>
+                                    <div class="table-product">
+                                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=40&h=40&fit=crop" alt="">
+                                        <span>Running Shoes Pro</span>
+                                    </div>
+                                </td>
+                                <td>Dec 22, 2024</td>
+                                <td><strong>$149.99</strong></td>
+                                <td><span class="status-pill processing">Processing</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger-outline" onclick="cancelOrder(3)">Cancel</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-001200</strong></td>
+                                <td>
+                                    <div class="table-product">
+                                        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=40&h=40&fit=crop" alt="">
+                                        <span>Leather Messenger Bag</span>
+                                    </div>
+                                </td>
+                                <td>Nov 28, 2024</td>
+                                <td><strong>$589.99</strong></td>
+                                <td><span class="status-pill delivered">Delivered</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline" onclick="location.href='invoice.html'">Invoice</button>
+                                    <button class="btn btn-sm btn-primary" onclick="reorder(4)">Reorder</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Personal Info Tab -->
+            <div class="tab-content" id="tab-personal">
+                <div class="tab-header">
+                    <h1>Personal Information</h1>
+                    <p>Update your personal details</p>
+                </div>
+                <form class="profile-form" onsubmit="savePersonalInfo(event)">
+                    <div class="form-avatar-section">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="form-avatar" id="formAvatar">
+                        <div class="avatar-actions">
+                            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('avatarInput2').click()">
+                                <i class="fas fa-camera"></i> Change Photo
+                            </button>
+                            <button type="button" class="btn btn-danger-outline btn-sm">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                            <input type="file" id="avatarInput2" hidden accept="image/*">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" value="Alex" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" value="Johnson" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" class="form-control" value="alex.johnson@email.com" required>
+                            <span class="field-verified"><i class="fas fa-check-circle"></i> Verified</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" class="form-control" value="+1 (555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" class="form-control" value="1990-06-15">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="form-control">
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Bio</label>
+                        <textarea class="form-control" rows="3" placeholder="Tell us about yourself...">Fashion enthusiast and tech lover based in New York.</textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="reset" class="btn btn-outline">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Addresses Tab -->
+            <div class="tab-content" id="tab-addresses">
+                <div class="tab-header">
+                    <h1>My Addresses</h1>
+                    <button class="btn btn-primary" onclick="showAddAddressForm()">
+                        <i class="fas fa-plus"></i> Add New Address
+                    </button>
+                </div>
+                <div class="addresses-grid">
+                    <div class="address-card default">
+                        <div class="address-badge">Default</div>
+                        <div class="address-type"><i class="fas fa-home"></i> Home</div>
+                        <div class="address-content">
+                            <p class="address-name">Alex Johnson</p>
+                            <p>123 Main Street, Apt 4B</p>
+                            <p>New York, NY 10001</p>
+                            <p>United States</p>
+                            <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        </div>
+                        <div class="address-actions">
+                            <button class="btn btn-sm btn-outline" onclick="editAddress(1)">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="address-card">
+                        <div class="address-type"><i class="fas fa-briefcase"></i> Work</div>
+                        <div class="address-content">
+                            <p class="address-name">Alex Johnson</p>
+                            <p>456 Business Ave, Floor 12</p>
+                            <p>New York, NY 10002</p>
+                            <p>United States</p>
+                            <p><i class="fas fa-phone"></i> +1 (555) 987-6543</p>
+                        </div>
+                        <div class="address-actions">
+                            <button class="btn btn-sm btn-outline" onclick="editAddress(2)">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger-outline" onclick="deleteAddress(2)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="setDefaultAddress(2)">
+                                Set Default
+                            </button>
+                        </div>
+                    </div>
+                    <div class="address-card add-new" onclick="showAddAddressForm()">
+                        <div class="add-new-icon"><i class="fas fa-plus"></i></div>
+                        <p>Add New Address</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods Tab -->
+            <div class="tab-content" id="tab-payment">
+                <div class="tab-header">
+                    <h1>Payment Methods</h1>
+                    <button class="btn btn-primary" onclick="showAddCardForm()">
+                        <i class="fas fa-plus"></i> Add New Card
+                    </button>
+                </div>
+                <div class="payment-methods-list">
+                    <div class="payment-card visa default">
+                        <div class="card-chip"></div>
+                        <div class="card-number">**** **** **** 4567</div>
+                        <div class="card-info">
+                            <div>
+                                <span class="card-label">Card Holder</span>
+                                <span class="card-value">Alex Johnson</span>
+                            </div>
+                            <div>
+                                <span class="card-label">Expires</span>
+                                <span class="card-value">12/26</span>
+                            </div>
+                        </div>
+                        <div class="card-brand"><i class="fab fa-cc-visa"></i></div>
+                        <div class="default-badge">Default</div>
+                        <div class="card-actions-overlay">
+                            <button class="btn btn-sm" onclick="editCard(1)"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCard(1)"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="payment-card mastercard">
+                        <div class="card-chip"></div>
+                        <div class="card-number">**** **** **** 8901</div>
+                        <div class="card-info">
+                            <div>
+                                <span class="card-label">Card Holder</span>
+                                <span class="card-value">Alex Johnson</span>
+                            </div>
+                            <div>
+                                <span class="card-label">Expires</span>
+                                <span class="card-value">08/25</span>
+                            </div>
+                        </div>
+                        <div class="card-brand"><i class="fab fa-cc-mastercard"></i></div>
+                        <div class="card-actions-overlay">
+                            <button class="btn btn-sm" onclick="editCard(2)"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCard(2)"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-sm btn-primary" onclick="setDefaultCard(2)">Set Default</button>
+                        </div>
+                    </div>
+                    <div class="payment-add-new" onclick="showAddCardForm()">
+                        <div class="add-new-icon"><i class="fas fa-plus"></i></div>
+                        <p>Add New Card</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="tab-content" id="tab-security">
+                <div class="tab-header">
+                    <h1>Security Settings</h1>
+                    <p>Manage your account security</p>
+                </div>
+                <div class="security-sections">
+                    <div class="security-card">
+                        <div class="security-icon"><i class="fas fa-lock"></i></div>
+                        <div class="security-info">
+                            <h3>Change Password</h3>
+                            <p>Last changed 3 months ago</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="showPasswordForm()">Change</button>
+                    </div>
+
+                    <div class="password-form" id="passwordForm" style="display:none;">
+                        <form onsubmit="changePassword(event)">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <div class="input-password">
+                                    <input type="password" class="form-control" id="currentPass" placeholder="Enter current password">
+                                    <button type="button" class="toggle-pass" onclick="togglePassword('currentPass')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <div class="input-password">
+                                    <input type="password" class="form-control" id="newPass" placeholder="Enter new password">
+                                    <button type="button" class="toggle-pass" onclick="togglePassword('newPass')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength" id="passStrength"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" class="form-control" placeholder="Confirm new password">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Update Password</button>
+                                <button type="button" class="btn btn-outline" onclick="hidePasswordForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="security-card">
+                        <div class="security-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="security-info">
+                            <h3>Two-Factor Authentication</h3>
+                            <p>Not enabled — we recommend enabling 2FA</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" onchange="toggle2FA(this)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="security-card">
+                        <div class="security-icon"><i class="fas fa-history"></i></div>
+                        <div class="security-info">
+                            <h3>Login History</h3>
+                            <p>View recent login activity</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="showLoginHistory()">View</button>
+                    </div>
+                    <div class="security-card danger">
+                        <div class="security-icon"><i class="fas fa-user-times"></i></div>
+                        <div class="security-info">
+                            <h3>Delete Account</h3>
+                            <p>Permanently delete your account and all data</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div class="tab-content" id="tab-notifications">
+                <div class="tab-header">
+                    <h1>Notification Preferences</h1>
+                    <p>Control how we contact you</p>
+                </div>
+                <div class="notification-groups">
+                    <div class="notif-group">
+                        <h3>Email Notifications</h3>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Order Updates</strong>
+                                <p>Get notified about your order status</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked onchange="updateNotif('order-email', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Promotions & Deals</strong>
+                                <p>Receive special offers and discounts</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked onchange="updateNotif('promo-email', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Newsletter</strong>
+                                <p>Weekly product highlights and news</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="updateNotif('newsletter', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="notif-group">
+                        <h3>Push Notifications</h3>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Price Drops</strong>
+                                <p>Alert when wishlist items go on sale</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked onchange="updateNotif('price-push', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Back in Stock</strong>
+                                <p>Alert when out-of-stock items return</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked onchange="updateNotif('stock-push', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="notif-group">
+                        <h3>SMS Notifications</h3>
+                        <div class="notif-item">
+                            <div>
+                                <strong>Order Confirmations</strong>
+                                <p>SMS confirmation for new orders</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="updateNotif('order-sms', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="saveNotifications()">
+                        <i class="fas fa-save"></i> Save Preferences
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rewards Tab -->
+            <div class="tab-content" id="tab-rewards">
+                <div class="tab-header">
+                    <h1><i class="fas fa-gift"></i> Rewards & Loyalty</h1>
+                    <p>Earn points and unlock exclusive benefits</p>
+                </div>
+                <div class="rewards-hero">
+                    <div class="rewards-card">
+                        <div class="rewards-card-bg"></div>
+                        <div class="rewards-card-content">
+                            <div class="rewards-tier">
+                                <i class="fas fa-crown"></i> Gold Member
+                            </div>
+                            <div class="rewards-points">
+                                <span class="points-big">1,240</span>
+                                <span>Available Points</span>
+                            </div>
+                            <div class="rewards-name">Alex Johnson</div>
+                            <div class="rewards-since">Member since Jan 2023</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rewards-options">
+                    <div class="redeem-option" onclick="redeemPoints(100)">
+                        <div class="redeem-icon"><i class="fas fa-tag"></i></div>
+                        <div class="redeem-info">
+                            <strong>100 Points</strong>
+                            <span>= $5 Discount</span>
+                        </div>
+                        <button class="btn btn-sm btn-primary">Redeem</button>
+                    </div>
+                    <div class="redeem-option" onclick="redeemPoints(500)">
+                        <div class="redeem-icon"><i class="fas fa-shipping-fast"></i></div>
+                        <div class="redeem-info">
+                            <strong>500 Points</strong>
+                            <span>= Free Shipping</span>
+                        </div>
+                        <button class="btn btn-sm btn-primary">Redeem</button>
+                    </div>
+                    <div class="redeem-option" onclick="redeemPoints(1000)">
+                        <div class="redeem-icon"><i class="fas fa-gift"></i></div>
+                        <div class="redeem-info">
+                            <strong>1,000 Points</strong>
+                            <span>= $75 Voucher</span>
+                        </div>
+                        <button class="btn btn-sm btn-primary">Redeem</button>
+                    </div>
+                </div>
+                <div class="points-history">
+                    <h3>Points History</h3>
+                    <div class="history-list">
+                        <div class="history-item earned">
+                            <i class="fas fa-plus-circle"></i>
+                            <div>
+                                <strong>+200 points</strong>
+                                <span>Order #ORD-001234</span>
+                            </div>
+                            <span class="history-date">Dec 15</span>
+                        </div>
+                        <div class="history-item earned">
+                            <i class="fas fa-plus-circle"></i>
+                            <div>
+                                <strong>+50 points</strong>
+                                <span>Product Review Bonus</span>
+                            </div>
+                            <span class="history-date">Dec 10</span>
+                        </div>
+                        <div class="history-item redeemed">
+                            <i class="fas fa-minus-circle"></i>
+                            <div>
+                                <strong>-100 points</strong>
+                                <span>Redeemed for $5 discount</span>
+                            </div>
+                            <span class="history-date">Dec 5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShopElite. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

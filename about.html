@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ShopElite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html"><i class="fas fa-shopping-bag"></i> ShopElite</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="location.href='wishlist.html'">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge">4</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+                <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-bg">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&h=600&fit=crop" alt="About Us Hero">
+            <div class="about-hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="about-hero-content">
+                <span class="hero-tag">Our Story</span>
+                <h1>We're Building the Future of Shopping</h1>
+                <p>ShopElite was founded with a simple mission: to make premium products accessible to everyone, everywhere — with a shopping experience that's as delightful as the products themselves.</p>
+                <div class="hero-ctas">
+                    <a href="#story" class="btn btn-white btn-lg">
+                        <i class="fas fa-play-circle"></i> Our Story
+                    </a>
+                    <a href="contact.html" class="btn btn-outline-white btn-lg">
+                        <i class="fas fa-handshake"></i> Work With Us
+                    </a>
+                </div>
+                <nav aria-label="breadcrumb" class="hero-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+                        <li class="active">About</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="about-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="about-stat" data-count="50000">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-counter" data-target="50000">0</div>
+                    <div class="stat-plus">+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="about-stat" data-count="10000">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-counter" data-target="10000">0</div>
+                    <div class="stat-plus">+</div>
+                    <div class="stat-label">Products Listed</div>
+                </div>
+                <div class="about-stat" data-count="500">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="stat-counter" data-target="500">0</div>
+                    <div class="stat-plus">+</div>
+                    <div class="stat-label">Brand Partners</div>
+                </div>
+                <div class="about-stat" data-count="50">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-counter" data-target="50">0</div>
+                    <div class="stat-plus">+</div>
+                    <div class="stat-label">Countries Served</div>
+                </div>
+                <div class="about-stat" data-count="99">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-counter" data-target="99">0</div>
+                    <div class="stat-suffix">%</div>
+                    <div class="stat-label">Customer Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section" id="story">
+        <div class="container">
+            <div class="story-layout">
+                <div class="story-images">
+                    <div class="story-img-main">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop" alt="Our Team">
+                    </div>
+                    <div class="story-img-secondary">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Founder">
+                        <div class="story-img-badge">
+                            <i class="fas fa-award"></i>
+                            <span>Since 2018</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-content">
+                    <span class="section-tag">Our Story</span>
+                    <h2>From a Small Garage to a Global Marketplace</h2>
+                    <p class="story-lead">It started in 2018 with a simple dream: create a shopping platform that truly puts the customer first.</p>
+                    <p>ShopElite was born when our founder, Michael Chen, struggled to find a trustworthy online store that offered both premium quality and transparent pricing. Frustrated by his experiences, he decided to build the solution himself — in his garage with a team of 3.</p>
+                    <p>Today, ShopElite employs over 200 people across 5 offices worldwide and serves customers in 50+ countries. But our core values haven't changed: quality, transparency, and putting our customers at the heart of everything we do.</p>
+                    <div class="story-milestones">
+                        <div class="milestone">
+                            <span class="milestone-year">2018</span>
+                            <span class="milestone-text">Founded in New York</span>
+                        </div>
+                        <div class="milestone">
+                            <span class="milestone-year">2020</span>
+                            <span class="milestone-text">Reached 10,000 customers</span>
+                        </div>
+                        <div class="milestone">
+                            <span class="milestone-year">2022</span>
+                            <span class="milestone-text">International expansion</span>
+                        </div>
+                        <div class="milestone">
+                            <span class="milestone-year">2024</span>
+                            <span class="milestone-text">50,000+ customers worldwide</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission, Vision, Values -->
+    <section class="mvv-section">
+        <div class="mvv-bg"></div>
+        <div class="container">
+            <div class="section-header centered">
+                <h2>What Drives Us</h2>
+                <p>Our mission, vision, and core values</p>
+            </div>
+            <div class="mvv-grid">
+                <div class="mvv-card mission">
+                    <div class="mvv-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To democratize access to premium products by creating the most trusted and enjoyable shopping platform on the internet, while supporting sustainable business practices.</p>
+                    <div class="mvv-accent"></div>
+                </div>
+                <div class="mvv-card vision">
+                    <div class="mvv-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To become the world's most customer-centric marketplace — where every person can find and discover anything they want to buy, with complete trust and delight.</p>
+                    <div class="mvv-accent"></div>
+                </div>
+                <div class="mvv-card values">
+                    <div class="mvv-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Our Values</h3>
+                    <ul class="values-list">
+                        <li><i class="fas fa-check"></i> Customer First — always</li>
+                        <li><i class="fas fa-check"></i> Radical transparency</li>
+                        <li><i class="fas fa-check"></i> Continuous innovation</li>
+                        <li><i class="fas fa-check"></i> Sustainable practices</li>
+                        <li><i class="fas fa-check"></i> Diversity & inclusion</li>
+                    </ul>
+                    <div class="mvv-accent"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header centered">
+                <h2>Meet the Team</h2>
+                <p>The passionate people behind ShopElite</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Michael Chen</h3>
+                        <span class="team-role">Founder & CEO</span>
+                        <p>Former Amazon engineer with 15 years in e-commerce. Visionary leader passionate about great customer experiences.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Williams">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Sarah Williams</h3>
+                        <span class="team-role">Chief Operations Officer</span>
+                        <p>Supply chain expert who ensures every order reaches customers on time, every time.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="David Park">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>David Park</h3>
+                        <span class="team-role">Chief Technology Officer</span>
+                        <p>Full-stack architect building the scalable, fast, and secure platform powering ShopElite.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Emma Rodriguez">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Emma Rodriguez</h3>
+                        <span class="team-role">Head of Customer Experience</span>
+                        <p>Dedicated to making every customer interaction memorable and every problem solved quickly.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="James Thompson">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>James Thompson</h3>
+                        <span class="team-role">Head of Partnerships</span>
+                        <p>Building relationships with 500+ brands to bring you the best products at great prices.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-wrapper">
+                        <img src="https://randomuser.me/api/portraits/women/52.jpg" alt="Lisa Kim">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Lisa Kim</h3>
+                        <span class="team-role">Creative Director</span>
+                        <p>Crafting the beautiful and intuitive shopping experience you love every day.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="team-join">
+                <div class="join-card">
+                    <div class="join-content">
+                        <h3>Want to Join Our Team?</h3>
+                        <p>We're always looking for passionate people who share our values</p>
+                        <a href="contact.html" class="btn btn-primary">
+                            <i class="fas fa-briefcase"></i> View Open Positions
+                        </a>
+                    </div>
+                    <div class="join-image">
+                        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=300&fit=crop" alt="Join Team">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us-section">
+        <div class="container">
+            <div class="section-header centered">
+                <h2>Why Choose ShopElite?</h2>
+                <p>What sets us apart from the rest</p>
+            </div>
+            <div class="why-us-grid">
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>100% Authentic</h3>
+                    <p>Every product is verified for authenticity. We work directly with brands and authorized distributors.</p>
+                </div>
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-undo"></i></div>
+                    <h3>Easy Returns</h3>
+                    <p>Not happy? Return anything within 30 days, no questions asked. Free return shipping included.</p>
+                </div>
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Secure Payments</h3>
+                    <p>Bank-level SSL encryption protects every transaction. Your financial data is always safe.</p>
+                </div>
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Fast Delivery</h3>
+                    <p>Most orders ship within 24 hours. Express and same-day delivery available in select areas.</p>
+                </div>
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Our dedicated support team is available around the clock via chat, email, or phone.</p>
+                </div>
+                <div class="why-us-item">
+                    <div class="why-icon"><i class="fas fa-leaf"></i></div>
+                    <h3>Eco Friendly</h3>
+                    <p>We use sustainable packaging and donate 1% of revenue to environmental causes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header centered">
+                <h2>What Our Customers Say</h2>
+                <p>Real reviews from real customers</p>
+                <div class="overall-rating">
+                    <div class="overall-stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span><strong>4.8</strong> out of 5 from 12,000+ reviews</span>
+                </div>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card featured-testimonial">
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p>"ShopElite completely changed how I shop online. The product quality is outstanding, delivery was faster than expected, and when I had a small issue, their support team resolved it within minutes. I'm a customer for life!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Jennifer L.">
+                        <div>
+                            <strong>Jennifer L.</strong>
+                            <span>New York, USA</span>
+                            <div class="testimonial-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p>"Best online shopping experience I've had. The website is beautiful and so easy to use. My orders always arrive perfectly packaged."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Robert K.">
+                        <div>
+                            <strong>Robert K.</strong>
+                            <span>London, UK</span>
+                            <div class="testimonial-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p>"I love the loyalty rewards program. I've saved hundreds of dollars in discounts. The product recommendations are surprisingly accurate too!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/67.jpg" alt="Maria S.">
+                        <div>
+                            <strong>Maria S.</strong>
+                            <span>Toronto, Canada</span>
+                            <div class="testimonial-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Stats -->
+            <div class="review-breakdown">
+                <div class="review-stat-row">
+                    <span>5 ★</span>
+                    <div class="review-bar-track">
+                        <div class="review-bar-fill" style="width:72%"></div>
+                    </div>
+                    <span>72%</span>
+                </div>
+                <div class="review-stat-row">
+                    <span>4 ★</span>
+                    <div class="review-bar-track">
+                        <div class="review-bar-fill" style="width:18%"></div>
+                    </div>
+                    <span>18%</span>
+                </div>
+                <div class="review-stat-row">
+                    <span>3 ★</span>
+                    <div class="review-bar-track">
+                        <div class="review-bar-fill" style="width:6%"></div>
+                    </div>
+                    <span>6%</span>
+                </div>
+                <div class="review-stat-row">
+                    <span>2 ★</span>
+                    <div class="review-bar-track">
+                        <div class="review-bar-fill" style="width:2%"></div>
+                    </div>
+                    <span>2%</span>
+                </div>
+                <div class="review-stat-row">
+                    <span>1 ★</span>
+                    <div class="review-bar-track">
+                        <div class="review-bar-fill" style="width:2%"></div>
+                    </div>
+                    <span>2%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners-section">
+        <div class="container">
+            <h3>Trusted By Leading Brands</h3>
+            <div class="partners-marquee">
+                <div class="marquee-track">
+                    <div class="partner-logo">TechPro</div>
+                    <div class="partner-logo">StyleHouse</div>
+                    <div class="partner-logo">FitGear</div>
+                    <div class="partner-logo">GlowBeauty</div>
+                    <div class="partner-logo">HomeNest</div>
+                    <div class="partner-logo">PageTurner</div>
+                    <div class="partner-logo">SpeedRacer</div>
+                    <div class="partner-logo">NatureFresh</div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="partner-logo">TechPro</div>
+                    <div class="partner-logo">StyleHouse</div>
+                    <div class="partner-logo">FitGear</div>
+                    <div class="partner-logo">GlowBeauty</div>
+                    <div class="partner-logo">HomeNest</div>
+                    <div class="partner-logo">PageTurner</div>
+                    <div class="partner-logo">SpeedRacer</div>
+                    <div class="partner-logo">NatureFresh</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="about-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Experience ShopElite?</h2>
+                <p>Join 50,000+ happy customers who trust us with their shopping needs</p>
+                <div class="cta-buttons">
+                    <a href="products.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag"></i> Start Shopping
+                    </a>
+                    <a href="contact.html" class="btn btn-outline-white btn-lg">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                </div>
+                <div class="cta-trust">
+                    <span><i class="fas fa-shield-alt"></i> Secure Shopping</span>
+                    <span><i class="fas fa-undo"></i> Free Returns</span>
+                    <span><i class="fas fa-shipping-fast"></i> Fast Delivery</span>
+                    <span><i class="fas fa-headset"></i> 24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid container">
+            <div class="footer-brand-col">
+                <div class="footer-brand"><i class="fas fa-shopping-bag"></i> ShopElite</div>
+                <p>Your premium shopping destination since 2018.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-links-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Shipping</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter-col">
+                <h4>Newsletter</h4>
+                <p>Stay updated with our latest news and offers</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShopElite. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/about.js"></script>
+</body>
+</html>

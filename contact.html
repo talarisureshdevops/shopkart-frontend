@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ShopElite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html"><i class="fas fa-shopping-bag"></i> ShopElite</a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="location.href='wishlist.html'">
+                    <i class="fas fa-heart"></i>
+                    <span class="badge">4</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+                <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="contact-hero-bg">
+            <div class="hero-blob blob-1"></div>
+            <div class="hero-blob blob-2"></div>
+            <div class="hero-blob blob-3"></div>
+        </div>
+        <div class="container">
+            <div class="contact-hero-content">
+                <span class="hero-tag">We're Here to Help</span>
+                <h1>Get in Touch</h1>
+                <p>Have a question, feedback, or need support? Our team is ready to assist you 24/7. Reach out through any of our channels below.</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+                        <li class="active">Contact</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Contact Cards -->
+    <section class="quick-contact">
+        <div class="container">
+            <div class="quick-contact-grid">
+                <div class="contact-card" onclick="window.location.href='tel:+18005550100'">
+                    <div class="contact-card-icon phone">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Phone Support</h3>
+                    <p class="contact-detail">+1 (800) 555-0100</p>
+                    <p class="contact-hours">Mon–Fri: 8am–8pm EST</p>
+                    <span class="availability online">
+                        <i class="fas fa-circle"></i> Available Now
+                    </span>
+                    <button class="btn btn-outline btn-sm">Call Us</button>
+                </div>
+
+                <div class="contact-card featured" onclick="window.location.href='mailto:support@shopelite.com'">
+                    <div class="contact-card-icon email">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Support</h3>
+                    <p class="contact-detail">support@shopelite.com</p>
+                    <p class="contact-hours">Response within 2 hours</p>
+                    <span class="availability online">
+                        <i class="fas fa-circle"></i> Fast Response
+                    </span>
+                    <button class="btn btn-primary btn-sm">Email Us</button>
+                </div>
+
+                <div class="contact-card" onclick="openLiveChat()">
+                    <div class="contact-card-icon chat">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Live Chat</h3>
+                    <p class="contact-detail">Chat with an agent</p>
+                    <p class="contact-hours">24/7 Available</p>
+                    <span class="availability online">
+                        <i class="fas fa-circle"></i> 3 Agents Online
+                    </span>
+                    <button class="btn btn-outline btn-sm">Start Chat</button>
+                </div>
+
+                <div class="contact-card" onclick="location.href='#faq'">
+                    <div class="contact-card-icon faq">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>Help Center</h3>
+                    <p class="contact-detail">Self-service support</p>
+                    <p class="contact-hours">200+ articles available</p>
+                    <span class="availability">
+                        <i class="fas fa-book"></i> Self-service
+                    </span>
+                    <button class="btn btn-outline btn-sm">Browse FAQ</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Contact Section -->
+    <section class="main-contact">
+        <div class="container">
+            <div class="contact-layout">
+                <!-- Contact Form -->
+                <div class="contact-form-section">
+                    <div class="form-header">
+                        <h2>Send Us a Message</h2>
+                        <p>Fill out the form and we'll get back to you shortly</p>
+                    </div>
+
+                    <div class="subject-tabs">
+                        <button class="subject-tab active" onclick="setSubject('General Inquiry', this)">General</button>
+                        <button class="subject-tab" onclick="setSubject('Order Issue', this)">Order Issue</button>
+                        <button class="subject-tab" onclick="setSubject('Returns', this)">Returns</button>
+                        <button class="subject-tab" onclick="setSubject('Technical Support', this)">Tech Support</button>
+                        <button class="subject-tab" onclick="setSubject('Partnership', this)">Partnership</button>
+                    </div>
+
+                    <form class="contact-form" id="contactForm" onsubmit="submitContactForm(event)" novalidate>
+                        <input type="hidden" id="subjectField" value="General Inquiry">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="firstName" class="form-control" placeholder="John" required>
+                                </div>
+                                <span class="error-msg" id="firstNameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="lastName" class="form-control" placeholder="Doe" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+                                </div>
+                                <span class="error-msg" id="emailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <div class="input-wrapper">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" id="phone" class="form-control" placeholder="+1 (555) 000-0000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orderId">Order ID (if applicable)</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-hashtag"></i>
+                                <input type="text" id="orderId" class="form-control" placeholder="e.g. ORD-001234">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-flag"></i>
+                                <select id="priority" class="form-control">
+                                    <option value="low">Low — General question</option>
+                                    <option value="medium" selected>Medium — Needs attention</option>
+                                    <option value="high">High — Urgent issue</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message <span class="required">*</span></label>
+                            <div class="textarea-wrapper">
+                                <textarea id="message" class="form-control" rows="5" placeholder="Please describe your inquiry in detail..." required maxlength="1000" oninput="updateCharCount()"></textarea>
+                                <span class="char-count"><span id="charCount">0</span>/1000</span>
+                            </div>
+                            <span class="error-msg" id="messageError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Attachments (optional)</label>
+                            <div class="file-upload-area" id="fileUploadArea" ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                <input type="file" id="fileInput" hidden multiple accept="image/*,.pdf" onchange="handleFileSelect(event)">
+                                <div class="upload-placeholder" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Drag & drop files here or <span class="upload-link">browse</span></p>
+                                    <span class="upload-hint">PNG, JPG, PDF up to 10MB each</span>
+                                </div>
+                                <div class="file-list" id="fileList"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacyConsent" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#">Privacy Policy</a> and consent to being contacted regarding my inquiry.
+                            </label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-lg btn-full" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </div>
+
+                        <!-- Success Message -->
+                        <div class="form-success" id="formSuccess" style="display:none;">
+                            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                            <h3>Message Sent!</h3>
+                            <p>Thank you! We've received your message and will respond to <strong id="successEmail"></strong> within 2 hours.</p>
+                            <p>Your ticket number: <strong>#TKT-<span id="ticketNumber"></span></strong></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Contact Info Sidebar -->
+                <div class="contact-info-section">
+                    <div class="info-card">
+                        <h3>Office Location</h3>
+                        <div class="map-placeholder">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095916186!2d-74.00425882427453!3d40.71253937132831!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a1654b9e3ad%3A0x20d483d31abde6f0!2sNew%20York%2C%20NY%2010001!5e0!3m2!1sen!2sus!4v1701500000000!5m2!1sen!2sus"
+                                width="100%" height="200" style="border:0;border-radius:12px;" allowfullscreen loading="lazy">
+                            </iframe>
+                        </div>
+                        <div class="office-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 123 Commerce Street, New York, NY 10001</p>
+                            <p><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm EST</p>
+                            <p><i class="fas fa-parking"></i> Free parking available</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Average Response Times</h3>
+                        <div class="response-times">
+                            <div class="response-item">
+                                <div class="response-channel">
+                                    <i class="fas fa-comments"></i> Live Chat
+                                </div>
+                                <div class="response-time">
+                                    <div class="time-bar" style="width:95%"></div>
+                                    <span>~2 min</span>
+                                </div>
+                            </div>
+                            <div class="response-item">
+                                <div class="response-channel">
+                                    <i class="fas fa-phone"></i> Phone
+                                </div>
+                                <div class="response-time">
+                                    <div class="time-bar" style="width:85%"></div>
+                                    <span>~5 min</span>
+                                </div>
+                            </div>
+                            <div class="response-item">
+                                <div class="response-channel">
+                                    <i class="fas fa-envelope"></i> Email
+                                </div>
+                                <div class="response-time">
+                                    <div class="time-bar" style="width:70%"></div>
+                                    <span>~2 hours</span>
+                                </div>
+                            </div>
+                            <div class="response-item">
+                                <div class="response-channel">
+                                    <i class="fas fa-form"></i> Form
+                                </div>
+                                <div class="response-time">
+                                    <div class="time-bar" style="width:60%"></div>
+                                    <span>~4 hours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card social-card">
+                        <h3>Find Us on Social</h3>
+                        <div class="social-links-contact">
+                            <a href="#" class="social-contact-link facebook">
+                                <i class="fab fa-facebook"></i>
+                                <div>
+                                    <strong>Facebook</strong>
+                                    <span>@ShopElite</span>
+                                </div>
+                            </a>
+                            <a href="#" class="social-contact-link twitter">
+                                <i class="fab fa-twitter"></i>
+                                <div>
+                                    <strong>Twitter / X</strong>
+                                    <span>@ShopEliteHQ</span>
+                                </div>
+                            </a>
+                            <a href="#" class="social-contact-link instagram">
+                                <i class="fab fa-instagram"></i>
+                                <div>
+                                    <strong>Instagram</strong>
+                                    <span>@shopelite.official</span>
+                                </div>
+                            </a>
+                            <a href="#" class="social-contact-link linkedin">
+                                <i class="fab fa-linkedin"></i>
+                                <div>
+                                    <strong>LinkedIn</strong>
+                                    <span>ShopElite Inc.</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-header centered">
+                <h2>Frequently Asked Questions</h2>
+                <p>Quick answers to common questions</p>
+                <div class="faq-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search FAQs..." oninput="filterFAQ(this.value)">
+                </div>
+            </div>
+
+            <div class="faq-categories">
+                <button class="faq-cat-btn active" onclick="filterFAQByCategory('all', this)">All</button>
+                <button class="faq-cat-btn" onclick="filterFAQByCategory('orders', this)">Orders</button>
+                <button class="faq-cat-btn" onclick="filterFAQByCategory('shipping', this)">Shipping</button>
+                <button class="faq-cat-btn" onclick="filterFAQByCategory('returns', this)">Returns</button>
+                <button class="faq-cat-btn" onclick="filterFAQByCategory('account', this)">Account</button>
+                <button class="faq-cat-btn" onclick="filterFAQByCategory('payment', this)">Payment</button>
+            </div>
+
+            <div class="faq-grid" id="faqGrid">
+                <div class="faq-item" data-category="orders">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I track my order?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>You can track your order by logging into your account and visiting the "My Orders" section. You'll find real-time tracking information and carrier details there. You'll also receive tracking updates via email.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="orders">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I modify or cancel my order?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Orders can be modified or cancelled within 1 hour of placement. After that, the order enters processing and changes may not be possible. Contact our support team immediately if you need to make changes.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="shipping">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What are your shipping options and costs?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We offer Standard (3-5 days, $5.99), Express (1-2 days, $14.99), and Same-Day delivery (select areas, $24.99). Orders over $50 qualify for free standard shipping.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="shipping">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do you ship internationally?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We ship to 50+ countries. International shipping rates and times vary by destination. Duties and taxes may apply and are the responsibility of the customer.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="returns">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What is your return policy?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We offer free 30-day returns on most items. Items must be in original condition with all tags and packaging. Start a return from your account dashboard or contact our support team.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="returns">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How long does a refund take?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Once we receive your return, refunds are processed within 2-3 business days. The time for funds to appear in your account depends on your payment method (typically 3-7 days for credit cards).</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="account">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I reset my password?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Click "Forgot Password" on the login page and enter your email address. You'll receive a reset link within a few minutes. Check your spam folder if you don't see it.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="payment">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What payment methods do you accept?</span>
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We accept Visa, Mastercard, American Express, PayPal, Apple Pay, Google Pay, and ShopElite Gift Cards. All transactions are secured with SSL encryption.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-bubble" onclick="toggleChat()">
+            <i class="fas fa-comments"></i>
+            <span class="chat-badge">3</span>
+        </div>
+        <div class="chat-panel" id="chatPanel" style="display:none;">
+            <div class="chat-panel-header">
+                <div class="chat-agents">
+                    <img src="https://randomuser.me/api/portraits/women/25.jpg" alt="Agent" class="agent-avatar">
+                    <div>
+                        <strong>Support Team</strong>
+                        <span class="online-status"><i class="fas fa-circle"></i> 3 agents online</span>
+                    </div>
+                </div>
+                <button onclick="toggleChat()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg bot">
+                    <span>Hi! 👋 How can we help you today?</span>
+                </div>
+            </div>
+            <div class="chat-quick-replies">
+                <button onclick="sendQuickReply('Track my order')">📦 Track order</button>
+                <button onclick="sendQuickReply('Return an item')">↩️ Returns</button>
+                <button onclick="sendQuickReply('Payment issue')">💳 Payment</button>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Full Footer -->
+    <footer class="footer">
+        <div class="footer-grid container">
+            <div class="footer-brand-col">
+                <div class="footer-brand"><i class="fas fa-shopping-bag"></i> ShopElite</div>
+                <p>Your premium shopping destination with world-class customer support.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="categories.html">Categories</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-links-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Track Order</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter-col">
+                <h4>Newsletter</h4>
+                <p>Stay updated with our latest deals</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 ShopElite. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/contact.js"></script>
+</body>
+</html>

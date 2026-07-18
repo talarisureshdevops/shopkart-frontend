@@ -1,0 +1,1324 @@
+shipping.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Management - Nexus Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --sidebar-width: 260px;
+            --header-height: 65px;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--secondary);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header .logo {
+            width: 36px; height: 36px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px;
+        }
+
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; }
+
+        .sidebar-nav { padding: 16px 12px; }
+
+        .nav-section { margin-bottom: 24px; }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--gray-400);
+            padding: 0 12px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--gray-300);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+        .nav-item.active { background: var(--primary); color: white; font-weight: 500; }
+        .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* ── Main ── */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .header {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0; z-index: 100;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 16px; }
+
+        .menu-toggle {
+            display: none;
+            background: none; border: none;
+            cursor: pointer; padding: 8px;
+            border-radius: 8px; color: var(--gray-600);
+        }
+
+        .menu-toggle:hover { background: var(--gray-100); }
+
+        .search-box { position: relative; }
+
+        .search-box input {
+            width: 300px;
+            padding: 9px 16px 9px 40px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--gray-50);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background: white;
+        }
+
+        .search-box .search-icon {
+            position: absolute; left: 12px;
+            top: 50%; transform: translateY(-50%);
+            width: 18px; height: 18px;
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .header-right { display: flex; align-items: center; gap: 8px; }
+
+        .header-btn {
+            width: 40px; height: 40px;
+            border-radius: 8px; border: none;
+            background: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray-500);
+            position: relative; transition: all 0.2s;
+        }
+
+        .header-btn:hover { background: var(--gray-100); color: var(--gray-700); }
+
+        .header-btn .notification-dot {
+            position: absolute; top: 8px; right: 8px;
+            width: 8px; height: 8px;
+            background: var(--danger); border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .user-menu {
+            display: flex; align-items: center; gap: 10px;
+            padding: 6px 12px 6px 6px;
+            border-radius: 8px; cursor: pointer;
+            transition: all 0.2s; margin-left: 8px;
+        }
+
+        .user-menu:hover { background: var(--gray-100); }
+
+        .user-avatar {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 600; font-size: 14px;
+        }
+
+        .user-info .name { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+        .user-info .role { font-size: 11px; color: var(--gray-500); }
+
+        /* ── Page Content ── */
+        .page-content { padding: 32px; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 26px; font-weight: 700;
+            color: var(--gray-900); margin-bottom: 4px;
+        }
+
+        .page-header p { color: var(--gray-500); font-size: 14px; }
+
+        .header-actions { display: flex; gap: 10px; }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center;
+            gap: 7px; border: none;
+        }
+
+        .btn svg { width: 16px; height: 16px; }
+
+        .btn-primary {
+            background: var(--primary); color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79,70,229,0.35);
+        }
+
+        .btn-outline {
+            background: white; color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-300); }
+
+        /* ── Stats Row ── */
+        .shipping-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            display: flex; align-items: center; gap: 14px;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 46px; height: 46px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon svg { width: 22px; height: 22px; }
+        .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
+        .stat-icon.green  { background: #d1fae5; color: #059669; }
+        .stat-icon.yellow { background: #fef3c7; color: #d97706; }
+        .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+        .stat-icon.red    { background: #fee2e2; color: #dc2626; }
+
+        .stat-value { font-size: 22px; font-weight: 700; color: var(--gray-900); }
+        .stat-label { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+
+        /* ── Filter Bar ── */
+        .filter-bar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            border: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: flex; align-items: center;
+            gap: 12px; flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex; align-items: center; gap: 7px;
+        }
+
+        .filter-group label {
+            font-size: 13px; font-weight: 600;
+            color: var(--gray-600); white-space: nowrap;
+        }
+
+        .filter-select {
+            padding: 7px 28px 7px 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 13px; color: var(--gray-700);
+            background: white; cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            outline: none;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .filter-search-wrap {
+            margin-left: auto;
+            position: relative;
+        }
+
+        .filter-search-wrap svg {
+            position: absolute; left: 10px;
+            top: 50%; transform: translateY(-50%);
+            width: 15px; height: 15px; color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .filter-search {
+            padding: 7px 12px 7px 30px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 13px; width: 200px;
+            background: var(--gray-50); outline: none;
+        }
+
+        .filter-search:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex; justify-content: space-between;
+            align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+
+        .card-header h3 { font-size: 16px; font-weight: 600; color: var(--gray-800); }
+
+        .card-header-right {
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* ── Table ── */
+        .table-wrap { overflow-x: auto; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            text-align: left;
+            padding: 11px 16px;
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.6px;
+            color: var(--gray-500);
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 13px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: var(--gray-50); }
+
+        .tracking-id {
+            font-weight: 700; color: var(--primary);
+            cursor: pointer; font-size: 13px;
+        }
+
+        .tracking-id:hover { text-decoration: underline; }
+
+        .cust-cell {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .cust-avatar {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        .cust-name { font-weight: 500; color: var(--gray-800); font-size: 13px; }
+        .cust-email { font-size: 12px; color: var(--gray-400); }
+
+        /* Status badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 5px;
+            white-space: nowrap;
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px; height: 6px; border-radius: 50%;
+        }
+
+        .badge-delivered   { background: #d1fae5; color: #059669; }
+        .badge-delivered::before   { background: #059669; }
+        .badge-in-transit  { background: #dbeafe; color: #2563eb; }
+        .badge-in-transit::before  { background: #2563eb; }
+        .badge-shipped     { background: #ede9fe; color: #7c3aed; }
+        .badge-shipped::before     { background: #7c3aed; }
+        .badge-processing  { background: #fef3c7; color: #d97706; }
+        .badge-processing::before  { background: #d97706; }
+        .badge-returned    { background: #fee2e2; color: #dc2626; }
+        .badge-returned::before    { background: #dc2626; }
+
+        .carrier-tag {
+            padding: 3px 8px; border-radius: 5px;
+            font-size: 11px; font-weight: 600;
+            background: var(--gray-100); color: var(--gray-600);
+        }
+
+        .action-btns { display: flex; gap: 6px; }
+
+        .icon-btn {
+            width: 30px; height: 30px; border-radius: 6px;
+            border: 1px solid var(--gray-200); background: white;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--gray-500); transition: all 0.2s;
+        }
+
+        .icon-btn svg { width: 14px; height: 14px; }
+
+        .icon-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .icon-btn.danger:hover {
+            background: #fee2e2;
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* ── Tracking + Map ── */
+        .tracking-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .tracking-panel { padding: 24px; }
+        .tracking-panel h4 {
+            font-size: 14px; font-weight: 700;
+            color: var(--gray-700); margin-bottom: 20px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .timeline { display: flex; flex-direction: column; }
+
+        .tl-item {
+            display: flex; gap: 14px;
+            padding-bottom: 22px; position: relative;
+        }
+
+        .tl-item:last-child { padding-bottom: 0; }
+
+        .tl-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 14px; top: 30px; bottom: 0;
+            width: 2px; background: var(--gray-200);
+        }
+
+        .tl-item.done:not(:last-child)::after { background: var(--success); }
+        .tl-item.active-step:not(:last-child)::after {
+            background: linear-gradient(to bottom, var(--primary), var(--gray-200));
+        }
+
+        .tl-dot {
+            width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; z-index: 1;
+            border: 2px solid var(--gray-200);
+            background: white;
+        }
+
+        .tl-item.done .tl-dot {
+            background: var(--success); border-color: var(--success);
+        }
+
+        .tl-item.active-step .tl-dot {
+            background: var(--primary-light); border-color: var(--primary);
+        }
+
+        .tl-dot svg { width: 13px; height: 13px; color: var(--gray-400); }
+        .tl-item.done .tl-dot svg { color: white; }
+        .tl-item.active-step .tl-dot svg { color: var(--primary); }
+
+        .tl-body { flex: 1; padding-top: 4px; }
+
+        .tl-body h5 {
+            font-size: 14px; font-weight: 600;
+            color: var(--gray-800); margin-bottom: 2px;
+        }
+
+        .tl-body p { font-size: 13px; color: var(--gray-500); }
+
+        .tl-body .tl-time {
+            font-size: 11px; color: var(--gray-400); margin-top: 3px;
+        }
+
+        /* Map placeholder */
+        .map-panel {
+            background: linear-gradient(135deg, #e8edf5, #d2dce8);
+            border-left: 1px solid var(--gray-200);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 14px; min-height: 300px;
+            position: relative; overflow: hidden;
+        }
+
+        .map-panel::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(79,70,229,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79,70,229,0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .map-pin {
+            width: 56px; height: 56px;
+            background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-lg);
+            position: relative; z-index: 1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0.3); }
+            50% { box-shadow: 0 0 0 14px rgba(79,70,229,0); }
+        }
+
+        .map-pin svg { width: 26px; height: 26px; color: var(--primary); }
+
+        .map-label {
+            font-size: 13px; font-weight: 600;
+            color: var(--gray-600); position: relative; z-index: 1;
+        }
+
+        .map-sublabel {
+            font-size: 12px; color: var(--gray-400);
+            position: relative; z-index: 1; margin-top: -10px;
+        }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-top: 1px solid var(--gray-100);
+            flex-wrap: wrap; gap: 12px;
+        }
+
+        .pagination .pg-info {
+            font-size: 13px; color: var(--gray-500);
+        }
+
+        .pagination .pg-btns { display: flex; gap: 4px; }
+
+        .pg-btn {
+            width: 32px; height: 32px; border-radius: 6px;
+            border: 1px solid var(--gray-200); background: white;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 500; color: var(--gray-600);
+            transition: all 0.2s;
+        }
+
+        .pg-btn:hover { background: var(--gray-50); border-color: var(--gray-300); }
+        .pg-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .pg-btn svg { width: 14px; height: 14px; }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%; max-width: 520px;
+            max-height: 90vh; overflow-y: auto;
+            animation: modalIn 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .modal-header h3 { font-size: 17px; font-weight: 700; color: var(--gray-900); }
+
+        .modal-close {
+            width: 32px; height: 32px; border-radius: 8px;
+            border: none; background: var(--gray-100);
+            cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            color: var(--gray-500); transition: all 0.2s;
+        }
+
+        .modal-close:hover { background: var(--gray-200); }
+        .modal-close svg { width: 16px; height: 16px; }
+
+        .modal-body { padding: 24px; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-row.full { grid-template-columns: 1fr; }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+        .form-group label {
+            font-size: 13px; font-weight: 600; color: var(--gray-700);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px; color: var(--gray-800);
+            background: var(--gray-50);
+            transition: all 0.2s; outline: none;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background: white;
+        }
+
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--gray-100);
+            display: flex; gap: 10px; justify-content: flex-end;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1100px) {
+            .tracking-grid { grid-template-columns: 1fr; }
+            .map-panel { min-height: 200px; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: flex; }
+            .search-box input { width: 180px; }
+            .page-content { padding: 20px 16px; }
+            .user-info { display: none; }
+            .header { padding: 0 16px; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .filter-search-wrap { margin-left: 0; }
+            .filter-search { width: 100%; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .search-box { display: none; }
+            .shipping-stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.45); z-index: 999;
+        }
+
+        .sidebar-overlay.active { display: block; }
+
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card { animation: fadeInUp 0.45s ease both; }
+        .stat-card:nth-child(2) { animation-delay: 0.07s; }
+        .stat-card:nth-child(3) { animation-delay: 0.14s; }
+        .stat-card:nth-child(4) { animation-delay: 0.21s; }
+        .stat-card:nth-child(5) { animation-delay: 0.28s; }
+        .card { animation: fadeInUp 0.5s ease both; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">N</div>
+        <h2>Nexus</h2>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">Main</div>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                Dashboard
+            </a>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Analytics
+            </a>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                Orders
+                <span class="badge">12</span>
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Management</div>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Users
+            </a>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                Products
+            </a>
+            <a class="nav-item active">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                Shipping
+            </a>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                Transactions
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Settings</div>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Settings
+            </a>
+            <a class="nav-item">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Help Center
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<!-- ── Main ── -->
+<main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="search-box">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" placeholder="Search shipments, orders…">
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                <span class="notification-dot"></span>
+            </button>
+            <button class="header-btn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </button>
+            <div class="user-menu">
+                <div class="user-avatar">JD</div>
+                <div class="user-info">
+                    <div class="name">John Doe</div>
+                    <div class="role">Administrator</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page -->
+    <div class="page-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Shipping Management</h1>
+                <p>Track, manage and update all shipments in one place.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Export
+                </button>
+                <button class="btn btn-primary" id="addShipmentBtn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Add Shipment
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="shipping-stats">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                </div>
+                <div>
+                    <div class="stat-value">1,284</div>
+                    <div class="stat-label">Total Shipments</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon yellow">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <div class="stat-value">342</div>
+                    <div class="stat-label">In Transit</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <div class="stat-value">876</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <div>
+                    <div class="stat-value">48</div>
+                    <div class="stat-label">Processing</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                </div>
+                <div>
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Returned</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Status:</label>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="in-transit">In Transit</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="processing">Processing</option>
+                    <option value="returned">Returned</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Carrier:</label>
+                <select class="filter-select" id="carrierFilter">
+                    <option value="">All Carriers</option>
+                    <option value="FedEx">FedEx</option>
+                    <option value="UPS">UPS</option>
+                    <option value="DHL">DHL</option>
+                    <option value="USPS">USPS</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Date:</label>
+                <select class="filter-select" id="dateFilter">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>This year</option>
+                </select>
+            </div>
+            <div class="filter-search-wrap">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input class="filter-search" type="text" id="tableSearch" placeholder="Search tracking ID…">
+            </div>
+        </div>
+
+        <!-- Shipments Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3>All Shipments</h3>
+                <div class="card-header-right">
+                    <span id="rowCount" style="font-size:13px;color:var(--gray-500);">Showing 8 of 8</span>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table id="shipmentsTable">
+                    <thead>
+                        <tr>
+                            <th>Tracking ID</th>
+                            <th>Customer</th>
+                            <th>Destination</th>
+                            <th>Carrier</th>
+                            <th>Status</th>
+                            <th>Est. Delivery</th>
+                            <th>Weight</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <div class="pg-info" id="pgInfo">Showing 1–8 of 8 results</div>
+                <div class="pg-btns">
+                    <button class="pg-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button class="pg-btn active">1</button>
+                    <button class="pg-btn">2</button>
+                    <button class="pg-btn">3</button>
+                    <button class="pg-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tracking Detail + Map -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Live Tracking — <span style="color:var(--primary)">#TRK-4821</span></h3>
+                <div class="card-header-right">
+                    <span class="badge badge-in-transit">In Transit</span>
+                </div>
+            </div>
+            <div class="tracking-grid">
+                <div class="tracking-panel">
+                    <h4>Shipment Timeline</h4>
+                    <div class="timeline">
+                        <div class="tl-item done">
+                            <div class="tl-dot">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div class="tl-body">
+                                <h5>Order Placed</h5>
+                                <p>New York, NY — Warehouse received</p>
+                                <div class="tl-time">Jan 12, 2025 · 09:14 AM</div>
+                            </div>
+                        </div>
+                        <div class="tl-item done">
+                            <div class="tl-dot">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div class="tl-body">
+                                <h5>Picked Up</h5>
+                                <p>Collected by FedEx courier</p>
+                                <div class="tl-time">Jan 12, 2025 · 02:30 PM</div>
+                            </div>
+                        </div>
+                        <div class="tl-item done">
+                            <div class="tl-dot">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div class="tl-body">
+                                <h5>In Transit</h5>
+                                <p>Departed Chicago sorting facility</p>
+                                <div class="tl-time">Jan 13, 2025 · 11:50 PM</div>
+                            </div>
+                        </div>
+                        <div class="tl-item active-step">
+                            <div class="tl-dot">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <div class="tl-body">
+                                <h5>Out for Delivery</h5>
+                                <p>Los Angeles distribution hub</p>
+                                <div class="tl-time">Jan 15, 2025 · 07:20 AM</div>
+                            </div>
+                        </div>
+                        <div class="tl-item">
+                            <div class="tl-dot">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            </div>
+                            <div class="tl-body">
+                                <h5>Delivered</h5>
+                                <p>Expected — Los Angeles, CA 90001</p>
+                                <div class="tl-time">Est. Jan 15, 2025</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-panel">
+                    <div class="map-pin">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <div class="map-label">Los Angeles, CA</div>
+                    <div class="map-sublabel">Last updated: 8 minutes ago</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /page-content -->
+</main>
+
+<!-- ── Add Shipment Modal ── -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Add New Shipment</h3>
+            <button class="modal-close" id="modalClose">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" placeholder="e.g. Sarah Miller">
+                </div>
+                <div class="form-group">
+                    <label>Customer Email</label>
+                    <input type="email" placeholder="email@example.com">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Order ID</label>
+                    <input type="text" placeholder="#ORD-0000">
+                </div>
+                <div class="form-group">
+                    <label>Tracking ID</label>
+                    <input type="text" placeholder="Auto-generated" readonly style="background:var(--gray-100);color:var(--gray-400);">
+                </div>
+            </div>
+            <div class="form-row full">
+                <div class="form-group">
+                    <label>Destination Address</label>
+                    <input type="text" placeholder="Street, City, State, ZIP">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Carrier</label>
+                    <select>
+                        <option>FedEx</option>
+                        <option>UPS</option>
+                        <option>DHL</option>
+                        <option>USPS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Shipping Method</label>
+                    <select>
+                        <option>Standard (5–7 days)</option>
+                        <option>Express (2–3 days)</option>
+                        <option>Overnight</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Package Weight (kg)</label>
+                    <input type="number" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Estimated Delivery</label>
+                    <input type="date">
+                </div>
+            </div>
+            <div class="form-row full">
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea placeholder="Special handling instructions…"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="cancelBtn">Cancel</button>
+            <button class="btn btn-primary" id="saveShipmentBtn">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Save Shipment
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── Shipment Data ── */
+    const shipments = [
+        { id: '#TRK-4821', customer: 'Sarah Miller',   email: 'sarah@email.com',   dest: 'Los Angeles, CA',  carrier: 'FedEx', status: 'in-transit',  est: 'Jan 15, 2025', weight: '2.4 kg', color: 'linear-gradient(135deg,#667eea,#764ba2)' },
+        { id: '#TRK-4820', customer: 'Alex Johnson',   email: 'alex@email.com',    dest: 'Chicago, IL',      carrier: 'UPS',   status: 'delivered',   est: 'Jan 13, 2025', weight: '1.1 kg', color: 'linear-gradient(135deg,#f093fb,#f5576c)' },
+        { id: '#TRK-4819', customer: 'Emily Wilson',   email: 'emily@email.com',   dest: 'Houston, TX',      carrier: 'DHL',   status: 'shipped',     est: 'Jan 16, 2025', weight: '5.8 kg', color: 'linear-gradient(135deg,#4facfe,#00f2fe)' },
+        { id: '#TRK-4818', customer: 'Michael Chen',   email: 'michael@email.com', dest: 'Phoenix, AZ',      carrier: 'USPS',  status: 'processing',  est: 'Jan 18, 2025', weight: '0.9 kg', color: 'linear-gradient(135deg,#43e97b,#38f9d7)' },
+        { id: '#TRK-4817', customer: 'Lisa Thompson',  email: 'lisa@email.com',    dest: 'Philadelphia, PA', carrier: 'FedEx', status: 'delivered',   est: 'Jan 12, 2025', weight: '3.2 kg', color: 'linear-gradient(135deg,#fa709a,#fee140)' },
+        { id: '#TRK-4816', customer: 'David Martinez', email: 'david@email.com',   dest: 'San Antonio, TX',  carrier: 'UPS',   status: 'returned',    est: 'Jan 10, 2025', weight: '2.0 kg', color: 'linear-gradient(135deg,#a18cd1,#fbc2eb)' },
+        { id: '#TRK-4815', customer: 'Jenny Park',     email: 'jenny@email.com',   dest: 'San Diego, CA',    carrier: 'DHL',   status: 'in-transit',  est: 'Jan 17, 2025', weight: '4.5 kg', color: 'linear-gradient(135deg,#ffecd2,#fcb69f)' },
+        { id: '#TRK-4814', customer: 'Tom Baker',      email: 'tom@email.com',     dest: 'Dallas, TX',       carrier: 'FedEx', status: 'shipped',     est: 'Jan 19, 2025', weight: '1.7 kg', color: 'linear-gradient(135deg,#a1c4fd,#c2e9fb)' },
+    ];
+
+    const statusLabel = {
+        'delivered':  'Delivered',
+        'in-transit': 'In Transit',
+        'shipped':    'Shipped',
+        'processing': 'Processing',
+        'returned':   'Returned',
+    };
+
+    function initials(name) {
+        return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        document.getElementById('rowCount').textContent = `Showing ${data.length} of ${shipments.length}`;
+
+        data.forEach(s => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="tracking-id">${s.id}</span></td>
+                <td>
+                    <div class="cust-cell">
+                        <div class="cust-avatar" style="background:${s.color}">${initials(s.customer)}</div>
+                        <div>
+                            <div class="cust-name">${s.customer}</div>
+                            <div class="cust-email">${s.email}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${s.dest}</td>
+                <td><span class="carrier-tag">${s.carrier}</span></td>
+                <td><span class="badge badge-${s.status}">${statusLabel[s.status]}</span></td>
+                <td>${s.est}</td>
+                <td>${s.weight}</td>
+                <td>
+                    <div class="action-btns">
+                        <button class="icon-btn" title="View">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </button>
+                        <button class="icon-btn" title="Edit">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </button>
+                        <button class="icon-btn danger" title="Delete">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    /* ── Filter Logic ── */
+    function applyFilters() {
+        const status   = document.getElementById('statusFilter').value;
+        const carrier  = document.getElementById('carrierFilter').value;
+        const search   = document.getElementById('tableSearch').value.toLowerCase();
+
+        const filtered = shipments.filter(s => {
+            const matchStatus  = !status  || s.status  === status;
+            const matchCarrier = !carrier || s.carrier === carrier;
+            const matchSearch  = !search  || s.id.toLowerCase().includes(search)
+                                          || s.customer.toLowerCase().includes(search);
+            return matchStatus && matchCarrier && matchSearch;
+        });
+
+        renderTable(filtered);
+    }
+
+    document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    document.getElementById('carrierFilter').addEventListener('change', applyFilters);
+    document.getElementById('tableSearch').addEventListener('input', applyFilters);
+
+    renderTable(shipments);
+
+    /* ── Mobile Sidebar ── */
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    document.getElementById('menuToggle').addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+
+    /* ── Modal ── */
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    document.getElementById('addShipmentBtn').addEventListener('click', () => {
+        modalOverlay.classList.add('open');
+    });
+
+    function closeModal() { modalOverlay.classList.remove('open'); }
+
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('cancelBtn').addEventListener('click', closeModal);
+
+    modalOverlay.addEventListener('click', e => {
+        if (e.target === modalOverlay) closeModal();
+    });
+
+    document.getElementById('saveShipmentBtn').addEventListener('click', () => {
+        closeModal();
+        alert('Shipment saved successfully!');
+    });
+
+    /* ── Pagination buttons ── */
+    document.querySelectorAll('.pg-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (this.querySelector('svg')) return;
+            document.querySelectorAll('.pg-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    /* ── Nav active ── */
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function () {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            }
+        });
+    });
+</script>
+</body>
+</html>

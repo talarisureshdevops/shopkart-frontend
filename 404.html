@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | ShopElite</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/404.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="error-page">
+    <!-- Minimal Header -->
+    <header class="header header-minimal" id="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="index.html"><i class="fas fa-shopping-bag"></i> ShopElite</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" onclick="location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-icon" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 404 Main Section -->
+    <main class="error-main">
+        <!-- Animated Background -->
+        <div class="error-bg">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+            <div class="floating-shape shape-4"></div>
+            <div class="floating-particles" id="particles"></div>
+        </div>
+
+        <div class="error-container">
+            <!-- Animated 404 Number -->
+            <div class="error-number-wrapper">
+                <div class="error-number">
+                    <span class="digit digit-4 first">4</span>
+                    <div class="digit-icon">
+                        <div class="shopping-cart-animation">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div class="cart-wheel wheel-1"></div>
+                            <div class="cart-wheel wheel-2"></div>
+                        </div>
+                    </div>
+                    <span class="digit digit-4 last">4</span>
+                </div>
+                <div class="error-glitch" aria-hidden="true">404</div>
+            </div>
+
+            <!-- Error Content -->
+            <div class="error-content">
+                <div class="error-icon-wrap">
+                    <div class="broken-map">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <div class="broken-x"><i class="fas fa-times"></i></div>
+                    </div>
+                </div>
+                <h1>Oops! Page Not Found</h1>
+                <p class="error-subtitle">Looks like this page went on a shopping spree and got lost!</p>
+                <p class="error-description">The page you're looking for doesn't exist, may have been moved, or the URL might be incorrect. Don't worry — let's get you back on track.</p>
+
+                <!-- Search Box -->
+                <div class="error-search">
+                    <h3>Try searching for what you need:</h3>
+                    <div class="error-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="errorSearch" placeholder="Search products, categories..." onkeydown="if(event.key==='Enter') goToSearch()">
+                        <button class="btn btn-primary" onclick="goToSearch()">Search</button>
+                    </div>
+                </div>
+
+                <!-- Navigation Options -->
+                <div class="error-nav-options">
+                    <a href="index.html" class="error-nav-btn">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="products.html" class="error-nav-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Products</span>
+                    </a>
+                    <a href="categories.html" class="error-nav-btn">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="contact.html" class="error-nav-btn">
+                        <i class="fas fa-headset"></i>
+                        <span>Support</span>
+                    </a>
+                    <button class="error-nav-btn" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Go Back</span>
+                    </button>
+                </div>
+
+                <!-- Popular Links -->
+                <div class="popular-links">
+                    <h4>Popular Right Now:</h4>
+                    <div class="popular-tags">
+                        <a href="products.html?cat=electronics" class="popular-tag">
+                            <i class="fas fa-laptop"></i> Electronics
+                        </a>
+                        <a href="products.html?sale=true" class="popular-tag hot">
+                            <i class="fas fa-fire"></i> Sale Items
+                        </a>
+                        <a href="products.html?sort=new" class="popular-tag">
+                            <i class="fas fa-star"></i> New Arrivals
+                        </a>
+                        <a href="products.html?cat=fashion" class="popular-tag">
+                            <i class="fas fa-tshirt"></i> Fashion
+                        </a>
+                        <a href="wishlist.html" class="popular-tag">
+                            <i class="fas fa-heart"></i> Wishlist
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Products on Error Page -->
+        <div class="error-products">
+            <div class="container">
+                <h3>Don't Leave Empty-Handed — Check These Out!</h3>
+                <div class="error-products-grid">
+                    <div class="error-product-card" onclick="location.href='product-detail.html'">
+                        <div class="ep-image">
+                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop" alt="Watch">
+                            <span class="ep-badge">-20%</span>
+                        </div>
+                        <div class="ep-info">
+                            <h4>Premium Watch</h4>
+                            <div class="ep-price">$199.99</div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addToCart(1)">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="error-product-card" onclick="location.href='product-detail.html'">
+                        <div class="ep-image">
+                            <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=200&h=200&fit=crop" alt="Headphones">
+                        </div>
+                        <div class="ep-info">
+                            <h4>Wireless Headphones</h4>
+                            <div class="ep-price">$299.99</div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addToCart(2)">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="error-product-card" onclick="location.href='product-detail.html'">
+                        <div class="ep-image">
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop" alt="Shoes">
+                            <span class="ep-badge new">NEW</span>
+                        </div>
+                        <div class="ep-info">
+                            <h4>Running Shoes</h4>
+                            <div class="ep-price">$149.99</div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addToCart(3)">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="error-product-card" onclick="location.href='product-detail.html'">
+                        <div class="ep-image">
+                            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop" alt="Bag">
+                        </div>
+                        <div class="ep-info">
+                            <h4>Leather Bag</h4>
+                            <div class="ep-price">$589.99</div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); addToCart(4)">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Minimal Footer -->
+    <footer class="footer-minimal">
+        <div class="container">
+            <p>&copy; 2024 ShopElite | <a href="index.html">Home</a> | <a href="contact.html">Support</a> | <a href="products.html">Shop</a></p>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/404.js"></script>
+</body>
+</html>
